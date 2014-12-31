@@ -1,0 +1,25 @@
+{
+  "author": "Josh Thomas",
+  "name": "cloudmix",
+  "description": "Sample project to show react/flux with node.",
+  "version": "0.0.1",
+  "homepage": "http://github.com/jthoms1/cloudmix",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jthoms1/cloudmix"
+  },
+  "dependencies": {
+    "express": "^4.10.6",
+    "bookshelf": "^0.7.9",
+    "bluebird": "^2.4.2",
+    "lodash": "^2.4.1",
+    "underscore.string": "^2.4.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": ""
+  }
+}
