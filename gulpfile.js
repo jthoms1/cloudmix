@@ -1,23 +1,23 @@
-"use strict";
+'use strict';
 
-var gulp       = require('gulp');
-var util       = require('gulp-util');
+var gulp = require('gulp');
+var util = require('gulp-util');
 //var imagemin   = require('gulp-imagemin');
 var browserify = require('gulp-browserify');
-var less       = require('gulp-less');
-var jshint     = require('gulp-jshint');
-var uglify     = require('gulp-uglify');
-var dotify     = require('gulp-dotify');
-var header     = require('gulp-header');
-var footer     = require('gulp-footer');
-var minifyCSS  = require('gulp-minify-css');
+var less = require('gulp-less');
+var jshint = require('gulp-jshint');
+var uglify = require('gulp-uglify');
+var dotify = require('gulp-dotify');
+var header = require('gulp-header');
+var footer = require('gulp-footer');
+var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
-var concat     = require('gulp-concat');
+var concat = require('gulp-concat');
 
 var dir = {
-    dev:  'dev/',
+    dev: 'dev/',
     prod: 'publish/',
-    src:  'src/'
+    src: 'src/'
 };
 
 // Lint Task
@@ -95,3 +95,4 @@ gulp.task('watch', function() {
 
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['css', 'images', 'templates', 'scripts', 'resources', 'watch']);
+

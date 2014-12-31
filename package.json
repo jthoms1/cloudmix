@@ -9,10 +9,14 @@
     "url": "git://github.com/jthoms1/cloudmix"
   },
   "dependencies": {
-    "express": "^4.10.6",
-    "bookshelf": "^0.7.9",
     "bluebird": "^2.4.2",
+    "body-parser": "^1.10.0",
+    "bookshelf": "^0.7.9",
+    "express": "^4.10.6",
+    "knex": "^0.7.3",
     "lodash": "^2.4.1",
+    "morgan": "^1.5.1",
+    "pg": "^4.1.1",
     "underscore.string": "^2.4.0"
   },
   "devDependencies": {

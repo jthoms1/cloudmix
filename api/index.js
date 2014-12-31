@@ -1,8 +1,10 @@
 'use strict';
 
 var express = require('express');
-var router  = express.Router();
-var _s      = require('underscore.string');
+var us = require('underscore.string');
+/*eslint-disable new-cap */
+var router = express.Router();
+/*eslint-enable new-cap */
 
 /*
   /api/user/1?with=organization.owner,organization.staff
@@ -28,7 +30,7 @@ var _s      = require('underscore.string');
 
 function withRelated(parameters) {
   if (!parameters.hasOwnProperty('with')) {
-    return;
+    return null;
   }
 
   return {
@@ -40,7 +42,7 @@ function parseOrderBy(parameters) {
   var direction, column;
 
   if (!parameters.hasOwnProperty('orderBy')) {
-    return;
+    return null;
   }
 
   if (parameters.orderBy.charAt(0) === '-') {
@@ -95,7 +97,7 @@ function getListOfItems(req, res, next, Model) {
     });
 }
 
-function createItem(req, res, Model) {
+function createItem(req, res) {
   res.send('not impleted');
 }
 
@@ -131,7 +133,7 @@ function deleteItem(req, res) {
 module.exports = function(models) {
 
   function getModelNameByResourceName (resourceName) {
-    return _s.capitalize(_s.camelize(resourceName));
+    return us.capitalize(us.camelize(resourceName));
   }
 
   function getModelByResourceName (resourceName) {
@@ -195,3 +197,4 @@ module.exports = function(models) {
     responder: responder
   };
 };
+

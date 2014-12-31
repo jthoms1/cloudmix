@@ -1,6 +1,15 @@
 DROP SCHEMA IF EXISTS "cloudmix" CASCADE;
 CREATE SCHEMA "cloudmix";
 
+DROP TABLE IF EXISTS "cloudmix"."user";
+CREATE TABLE "cloudmix"."user" (
+  "id" SERIAL,
+  "email" VARCHAR(127) NOT NULL,
+  "created_at" TIMESTAMP,
+  "updated_at" TIMESTAMP,
+  PRIMARY KEY ("id")
+);
+
 DROP TABLE IF EXISTS "cloudmix"."playlist";
 CREATE TABLE "cloudmix"."playlist" (
   "id" SERIAL,
@@ -10,7 +19,7 @@ CREATE TABLE "cloudmix"."playlist" (
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
   PRIMARY KEY ("id"),
-  FOREIGN KEY ("user_id") REFERENCES "cloudmix"."user" ("id"),
+  FOREIGN KEY ("user_id") REFERENCES "cloudmix"."user" ("id")
 );
 
 DROP TABLE IF EXISTS "cloudmix"."track";
@@ -21,11 +30,20 @@ CREATE TABLE "cloudmix"."track" (
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
   PRIMARY KEY ("id"),
-  FOREIGN KEY ("playlist_id") REFERENCES "cloudmix"."playlist" ("id"),
+  FOREIGN KEY ("playlist_id") REFERENCES "cloudmix"."playlist" ("id")
+);
+
+DROP TABLE IF EXISTS "cloudmix"."tag";
+CREATE TABLE "cloudmix"."tag" (
+  "id" SERIAL,
+  "name" VARCHAR(127),
+  "created_at" TIMESTAMP,
+  "updated_at" TIMESTAMP,
+  PRIMARY KEY ("id")
 );
 
 DROP TABLE IF EXISTS "cloudmix"."tracktag";
-CREATE TABLE "cloudmix"."track" (
+CREATE TABLE "cloudmix"."tracktag" (
   "id" SERIAL,
   "track_id" INTEGER NOT NULL,
   "tag_id" INTEGER NOT NULL,
@@ -36,27 +54,10 @@ CREATE TABLE "cloudmix"."track" (
   FOREIGN KEY ("tag_id") REFERENCES "cloudmix"."tag" ("id")
 );
 
-DROP TABLE IF EXISTS "cloudmix"."tag";
-CREATE TABLE "cloudmix"."tag" (
-  "id" SERIAL,
-  "name" VARCHAR(127),
-  "created_at" TIMESTAMP,
-  "updated_at" TIMESTAMP,
-	PRIMARY KEY ("id")
-);
-
-DROP TABLE IF EXISTS "cloudmix"."user";
-CREATE TABLE "cloudmix"."user" (
-  "id" SERIAL,
-  "email" VARCHAR(127) NOT NULL,
-  "created_at" TIMESTAMP,
-  "updated_at" TIMESTAMP,
-  PRIMARY KEY ("id")
-);
-
 DROP TABLE IF EXISTS "cloudmix"."schemaupgrade";
 CREATE TABLE "cloudmix"."schemaupgrade" (
-	"time" TIMESTAMP,
-	"scriptfilename" VARCHAR(255),
-	"scriptfilehash" CHAR(40)
+  "time" TIMESTAMP,
+  "scriptfilename" VARCHAR(255),
+  "scriptfilehash" CHAR(40)
 );
+
