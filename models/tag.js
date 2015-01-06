@@ -10,12 +10,11 @@ module.exports = function(bookshelf, models) {
     idAttribute: 'id',
     hasTimestamps: ['created_at', 'updated_at'],
 
-    // Define Relationships
-    track: function () {
-      return this.hasMany(models.Track, 'playlist_id');
+    songs: function() {
+      return this.belongsToMany(models.Song, 'tag_song');
     },
-    user: function () {
-      return this.belongsTo(models.User, 'user_id');
+    albums: function() {
+      return this.belongsToMany(models.Album, 'album_tag');
     }
   });
 

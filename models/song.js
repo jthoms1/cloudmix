@@ -1,7 +1,7 @@
 'use strict';
 
 var us = require('underscore.string');
-var tableName = 'playlist';
+var tableName = 'song';
 
 module.exports = function(bookshelf, models) {
 
@@ -11,14 +11,14 @@ module.exports = function(bookshelf, models) {
     hasTimestamps: ['created_at', 'updated_at'],
 
     // Define Relationships
-    track: function () {
-      return this.hasMany(models.Track, 'playlist_id');
+    tag: function () {
+      return this.belongsToMany(models.Tag, 'tag_song');
     },
-    songs: function () {
-      return this.hasMany(models.Song).through(models.Track);
+    tracks: function () {
+      return this.hasMany(models.Track, 'song_id');
     },
-    user: function () {
-      return this.belongsTo(models.User, 'user_id');
+    playlists: function () {
+      return this.hasMany(models.Playlist).through(models.Track);
     }
   });
 

@@ -2,10 +2,8 @@
 
 var gulp = require('gulp');
 var util = require('gulp-util');
-//var imagemin   = require('gulp-imagemin');
 var browserify = require('gulp-browserify');
-var less = require('gulp-less');
-var jshint = require('gulp-jshint');
+var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 var dotify = require('gulp-dotify');
 var header = require('gulp-header');
@@ -20,27 +18,12 @@ var dir = {
     src: 'src/'
 };
 
-// Lint Task
-gulp.task('lint', function() {
-    gulp.src(dir.src + 'js/**/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
-});
-
 gulp.task('css', function() {
     var destination = (util.env.production ? dir.prod : dir.dev) + 'css/';
 
-    gulp.src(dir.src + 'css/base.less')
-        .pipe(less())
+    gulp.src(dir.src + 'css/base.scss')
+        .pipe(sass())
         .pipe(util.env.production ? minifyCSS() : util.noop())
-        .pipe(gulp.dest(destination));
-});
-
-gulp.task('images', function() {
-    var destination = (util.env.production ? dir.prod : dir.dev) + 'img/';
-
-    gulp.src(dir.src + 'img/**/*')
-//        .pipe(imagemin())
         .pipe(gulp.dest(destination));
 });
 

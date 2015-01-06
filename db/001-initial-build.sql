@@ -42,8 +42,8 @@ CREATE TABLE "cloudmix"."tag" (
   PRIMARY KEY ("id")
 );
 
-DROP TABLE IF EXISTS "cloudmix"."tracktag";
-CREATE TABLE "cloudmix"."tracktag" (
+DROP TABLE IF EXISTS "cloudmix"."tag_track";
+CREATE TABLE "cloudmix"."tag_track" (
   "id" SERIAL,
   "track_id" INTEGER NOT NULL,
   "tag_id" INTEGER NOT NULL,

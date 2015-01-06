@@ -11,11 +11,11 @@ module.exports = function(bookshelf, models) {
     hasTimestamps: ['created_at', 'updated_at'],
 
     // Define Relationships
-    track: function () {
-      return this.hasMany(models.Track, 'playlist_id');
+    playlist: function () {
+      return this.belongsTo(models.Playlist, 'playlist_id');
     },
-    user: function () {
-      return this.belongsTo(models.User, 'user_id');
+    song: function () {
+      return this.hasOne(models.Song, 'song_id');
     }
   });
 

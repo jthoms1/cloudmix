@@ -130,7 +130,7 @@ function deleteItem(req, res) {
 }
 
 
-module.exports = function(models) {
+module.exports = function billyapi (models, options) {
 
   function getModelNameByResourceName (resourceName) {
     return us.capitalize(us.camelize(resourceName));
@@ -143,6 +143,20 @@ module.exports = function(models) {
       return models[modelName];
     }
   }
+
+  var optionDefaults = {
+    paramTransform: function (params) {
+      return params;
+    },
+    responseTransform: function (req, res) {
+      res.json(req.apiData.toJSON());
+    }
+  };
+
+
+  options = options || optionDefaults;
+  options.paramTransform = options.paramTransform || optionDefaults.paramTransform;
+  options.responseTransform = options.responseTransform || optionDefaults.responseTransform;
 
   router.route('/:resource')
     .get(function(req, res, next) {
@@ -188,13 +202,10 @@ module.exports = function(models) {
       deleteItem(req, res, next, Model);
     });
 
-  var responder = function (req, res) {
-    res.json(req.apiData.toJSON());
-  };
+  return function api(req, res) {
+    var params = options.paramTransform(req.params);
 
-  return {
-    router: router,
-    responder: responder
+    options.responseTransform(req, res);
   };
 };
 

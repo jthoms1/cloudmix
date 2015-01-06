@@ -25,6 +25,8 @@ usermod -aG sudo $safeuser_username # Add safe user to the sudo group
 echo "Installing Git and Curl"
 sudo apt-get install git curl -y > /dev/null
 
+echo "Installing app specific libs"
+sudo apt-get install libtag1-dev -y > /dev/null
 
 # --------------------------------------------------
 # Install Nginx

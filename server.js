@@ -2,6 +2,8 @@
 
 var express = require('express');
 var morgan = require('morgan');
+var billyapi = require('./api');
+var site = require('./app');
 var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
@@ -18,8 +20,6 @@ if (environment === 'development') {
   console.log('Running in dev mode.');
 }
 
-
-
 // Setup database connection info
 var dbConfig = require('./config/dbc.json');
 var knex = require('knex')({
@@ -32,22 +32,11 @@ var knex = require('knex')({
   }
 });
 var bookshelf = require('bookshelf')(knex);
-// Require models
 var models = require('./models')(bookshelf);
 
 
-var api = require('./api')(models);
-app.use('/api', api.router, api.responder);
-
-
-app.route('/login')
-.get(function(req, res) {
-  res.send('this is the login form');
-})
-.post(function(req, res) {
-  res.send('processing the login form!');
-});
-
+app.use('/api', billyapi(models));
+app.use(site(models));
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
