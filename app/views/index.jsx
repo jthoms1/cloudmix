@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-
+var React = require('react');
 var DefaultLayout = require('./layouts/default');
 
 var HelloMessage = React.createClass({

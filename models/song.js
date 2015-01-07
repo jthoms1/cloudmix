@@ -1,24 +1,31 @@
 'use strict';
 
-var us = require('underscore.string');
+var inflection = require('inflection');
 var tableName = 'song';
+var modelName = inflection.classify(tableName);
 
 module.exports = function(bookshelf, models) {
 
-  var model = models[us.classify(tableName)] = bookshelf.Model.extend({
+  var model = models[modelName] = bookshelf.Model.extend({
     tableName: 'cloudmix.' + tableName,
     idAttribute: 'id',
     hasTimestamps: ['created_at', 'updated_at'],
 
     // Define Relationships
     tag: function () {
-      return this.belongsToMany(models.Tag, 'tag_song');
+      return this.belongsToMany(models.Tag, 'song_tag');
     },
-    tracks: function () {
-      return this.hasMany(models.Track, 'song_id');
+    playlistSong: function () {
+      return this.hasMany(models.PlaylistSong, 'song_id');
     },
-    playlists: function () {
-      return this.hasMany(models.Playlist).through(models.Track);
+    playlist: function () {
+      return this.hasMany(models.Playlist).through(models.PlaylistSong);
+    },
+    artist: function () {
+      return this.belongsTo(models.Artist, 'artist_id');
+    },
+    album: function () {
+      return this.belongsTo(models.Album, 'album_id');
     }
   });
 

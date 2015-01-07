@@ -1,11 +1,12 @@
 'use strict';
 
-var us = require('underscore.string');
+var inflection = require('inflection');
 var tableName = 'playlist';
+var modelName = inflection.classify(tableName);
 
 module.exports = function(bookshelf, models) {
 
-  var model = models[us.classify(tableName)] = bookshelf.Model.extend({
+  var model = models[modelName] = bookshelf.Model.extend({
     tableName: 'cloudmix.' + tableName,
     idAttribute: 'id',
     hasTimestamps: ['created_at', 'updated_at'],

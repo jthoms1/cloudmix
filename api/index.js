@@ -1,15 +1,16 @@
 'use strict';
 
+var inflection = require('inflection');
 var express = require('express');
-var us = require('underscore.string');
-/*eslint-disable new-cap */
 var router = express.Router();
-/*eslint-enable new-cap */
 
 /*
-  /api/user/1?with=organization.owner,organization.staff
+  /api/user/1?include=organization.owner,organization.staff
+
+  /api/user/1/links/organization
 
   /api/user?firstName=like:Joh*
+  /api/user?role=editor&createdBy=4
   /api/user?role=eq:editor
   /api/user?role=eq:editor&createdBy=eq:4
   /api/user?role=in:editor,author
@@ -22,17 +23,13 @@ var router = express.Router();
   /api/user?limit=10
   /api/user?limit=20,10
 
-  /api/user?orderBy=lastName
-  /api/user?orderBy=-lastName
-  /api/user?orderBy=-lastName,firstName
+  /api/user?sort=lastName
+  /api/user?sort=-lastName
+  /api/user?sort=-lastName,firstName
 
 */
 
 function withRelated(parameters) {
-  if (!parameters.hasOwnProperty('with')) {
-    return null;
-  }
-
   return {
     withRelated: parameters.with.split(',')
   };
@@ -40,10 +37,6 @@ function withRelated(parameters) {
 
 function parseOrderBy(parameters) {
   var direction, column;
-
-  if (!parameters.hasOwnProperty('orderBy')) {
-    return null;
-  }
 
   if (parameters.orderBy.charAt(0) === '-') {
     direction = 'desc';
@@ -84,128 +77,86 @@ function buildQuery(parameters) {
   };
 }
 
-function getListOfItems(req, res, next, Model) {
-  Model
-    .query(buildQuery(req.query))
-    .fetchAll(withRelated(req.query))
-    .then(function(items) {
-      req.apiData = items;
-      next();
-    })
-    .catch(function(err) {
-      res.send(err);
-    });
+function getListOfItems(params, Model) {
+  return Model
+//    .query(buildQuery(req.query))
+//    .fetchAll(withRelated(req.query))
+    .fetchAll();
 }
 
-function createItem(req, res) {
-  res.send('not impleted');
-}
-
-function getItem(req, res, next, Model) {
+function getItem(params, Model) {
   var instance = new Model();
-  var parameters = {};
-  parameters[instance.idAttribute] = req.params.itemId;
+  parameters[instance.idAttribute] = params.itemId;
 
-  new Model(parameters)
-    .fetch(withRelated(req.query))
-    .then(function(items) {
-      req.apiData = items;
-      next();
-    })
-    .catch(function(err) {
-      res.send(err);
-    });
+  return new Model(parameters)
+    .fetch();
+//    .fetch(withRelated(req.query))
 }
-
-function updateItem(req, res) {
-  res.send('not impleted');
-}
-
-function patchItem(req, res) {
-  res.send('not impleted');
-}
-
-function deleteItem(req, res) {
-  res.send('not impleted');
-}
-
 
 module.exports = function billyapi (models, options) {
 
   function getModelNameByResourceName (resourceName) {
-    return us.capitalize(us.camelize(resourceName));
+    return inflection.capitalize(inflection.camelize(resourceName));
   }
 
   function getModelByResourceName (resourceName) {
     var modelName = getModelNameByResourceName(resourceName);
-
     if (models.hasOwnProperty(modelName)) {
       return models[modelName];
     }
   }
 
   var optionDefaults = {
-    paramTransform: function (params) {
-      return params;
+    paramTransform: function (req) {
+      return req.params;
     },
     responseTransform: function (req, res) {
       res.json(req.apiData.toJSON());
     }
   };
 
-
   options = options || optionDefaults;
-  options.paramTransform = options.paramTransform || optionDefaults.paramTransform;
-  options.responseTransform = options.responseTransform || optionDefaults.responseTransform;
+  var paramTransform = options.paramTransform || optionDefaults.paramTransform;
+  var responseTransform = options.responseTransform || optionDefaults.responseTransform;
 
-  router.route('/:resource')
-    .get(function(req, res, next) {
-      var Model = getModelByResourceName(req.params.resource);
-      if (!Model) { return res.status(404).send('Not found'); }
+  router.param('resource', function (req, res, next, resource) {
+    var Model = getModelByResourceName(resource);
+    if (!Model) {
+      return res.status(404).send('Not found');
+    } else {
+      req.Model = Model;
+      next();
+    }
+  });
 
-      getListOfItems(req, res, next, Model);
-    })
+  router.use('/:resource', function (req, res, next) {
+    var params = paramTransform(req);
 
-    .post(function (req, res, next) {
-      var Model = getModelByResourceName(req.params.resource);
-      if (!Model) { return res.status(404).send('Not found'); }
+    getListOfItems(params, req.Model)
+      .then(function(items) {
+        req.apiData = items;
+        next();
+      })
+      .catch(function(err) {
+        res.send(err);
+       });
+  });
 
-      createItem(req, res, next, Model);
-    });
+  router.use('/:resource/:itemId', function (req, res, next) {
+    var params = paramTransform(req);
 
-  router.route('/:resource/:itemId')
-    .get(function (req, res, next) {
-      var Model = getModelByResourceName(req.params.resource);
-      if (!Model) { return res.status(404).send('Not found'); }
+    getItem(params, req.Model)
+      .then(function(items) {
+        req.apiData = items;
+        next();
+      })
+      .catch(function(err) {
+        res.send(err);
+      });
+  });
 
-      getItem(req, res, next, Model);
-    })
+  router.use(responseTransform);
 
-    .put(function (req, res, next) {
-      var Model = getModelByResourceName(req.params.resource);
-      if (!Model) { return res.status(404).send('Not found'); }
-
-      updateItem(req, res, next, Model);
-    })
-
-    .patch(function (req, res, next) {
-      var Model = getModelByResourceName(req.params.resource);
-      if (!Model) { return res.status(404).send('Not found'); }
-
-      patchItem(req, res, next, Model);
-    })
-
-    .delete(function (req, res, next) {
-      var Model = getModelByResourceName(req.params.resource);
-      if (!Model) { return res.status(404).send('Not found'); }
-
-      deleteItem(req, res, next, Model);
-    });
-
-  return function api(req, res) {
-    var params = options.paramTransform(req.params);
-
-    options.responseTransform(req, res);
-  };
+  return router;
 };
 

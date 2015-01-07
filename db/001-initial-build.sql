@@ -1,6 +1,40 @@
 DROP SCHEMA IF EXISTS "cloudmix" CASCADE;
 CREATE SCHEMA "cloudmix";
 
+DROP TABLE IF EXISTS "cloudmix"."artist";
+CREATE TABLE "cloudmix"."artist" (
+  "id" SERIAL,
+  "name" VARCHAR(127) NOT NULL,
+  PRIMARY KEY ("id")
+);
+
+DROP TABLE IF EXISTS "cloudmix"."album";
+CREATE TABLE "cloudmix"."album" (
+  "id" SERIAL,
+  "name" VARCHAR(127) NOT NULL,
+  "year" TIMESTAMP,
+  "artist_id" INTEGER NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("artist_id") REFERENCES "cloudmix"."artist" ("id")
+);
+
+DROP TABLE IF EXISTS "cloudmix"."song";
+CREATE TABLE "cloudmix"."song" (
+  "id" SERIAL,
+  "name" VARCHAR(127) NOT NULL,
+  "duration" INTERVAL,
+  "album_order" INTEGER NOT NULL,
+  "artist_id" INTEGER NOT NULL,
+  "album_id" INTEGER NOT NULL,
+  "explicit" BOOLEAN,
+  "created_at" TIMESTAMP,
+  "updated_at" TIMESTAMP,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("artist_id") REFERENCES "cloudmix"."artist" ("id"),
+  FOREIGN KEY ("album_id") REFERENCES "cloudmix"."album" ("id")
+);
+
+
 DROP TABLE IF EXISTS "cloudmix"."user";
 CREATE TABLE "cloudmix"."user" (
   "id" SERIAL,
@@ -22,15 +56,17 @@ CREATE TABLE "cloudmix"."playlist" (
   FOREIGN KEY ("user_id") REFERENCES "cloudmix"."user" ("id")
 );
 
-DROP TABLE IF EXISTS "cloudmix"."track";
-CREATE TABLE "cloudmix"."track" (
+DROP TABLE IF EXISTS "cloudmix"."playlist_song";
+CREATE TABLE "cloudmix"."playlist_song" (
   "id" SERIAL,
+  "playlist_id" INTEGER NOT NULL,
   "song_id" INTEGER NOT NULL,
-  "index" INTEGER NOT NULL,
+  "playlist_order" INTEGER NOT NULL,
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
   PRIMARY KEY ("id"),
-  FOREIGN KEY ("playlist_id") REFERENCES "cloudmix"."playlist" ("id")
+  FOREIGN KEY ("playlist_id") REFERENCES "cloudmix"."playlist" ("id"),
+  FOREIGN KEY ("song_id") REFERENCES "cloudmix"."song" ("id")
 );
 
 DROP TABLE IF EXISTS "cloudmix"."tag";
@@ -42,15 +78,15 @@ CREATE TABLE "cloudmix"."tag" (
   PRIMARY KEY ("id")
 );
 
-DROP TABLE IF EXISTS "cloudmix"."tag_track";
-CREATE TABLE "cloudmix"."tag_track" (
+DROP TABLE IF EXISTS "cloudmix"."song_tag";
+CREATE TABLE "cloudmix"."song_tag" (
   "id" SERIAL,
-  "track_id" INTEGER NOT NULL,
+  "song_id" INTEGER NOT NULL,
   "tag_id" INTEGER NOT NULL,
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
   PRIMARY KEY ("id"),
-  FOREIGN KEY ("track_id") REFERENCES "cloudmix"."track" ("id"),
+  FOREIGN KEY ("song_id") REFERENCES "cloudmix"."song" ("id"),
   FOREIGN KEY ("tag_id") REFERENCES "cloudmix"."tag" ("id")
 );
 

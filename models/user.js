@@ -1,21 +1,19 @@
 'use strict';
 
-var us = require('underscore.string');
+var inflection = require('inflection');
 var tableName = 'user';
+var modelName = inflection.classify(tableName);
 
 module.exports = function(bookshelf, models) {
 
-  var model = models[us.classify(tableName)] = bookshelf.Model.extend({
+  var model = models[modelName] = bookshelf.Model.extend({
     tableName: 'cloudmix.' + tableName,
     idAttribute: 'id',
     hasTimestamps: ['created_at', 'updated_at'],
 
     // Define Relationships
-    track: function () {
-      return this.hasMany(models.Track, 'playlist_id');
-    },
-    user: function () {
-      return this.belongsTo(models.User, 'user_id');
+    playlist: function () {
+      return this.hasMany(models.Playlist, 'playlist_id');
     }
   });
 

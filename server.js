@@ -7,7 +7,7 @@ var site = require('./app');
 var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
-var port = process.env.PORT || 5858;
+var port = process.env.PORT || 8080;
 var environment = process.env.NODE_ENV || 'development';
 
 // Setup middleware
@@ -24,6 +24,7 @@ if (environment === 'development') {
 var dbConfig = require('./config/dbc.json');
 var knex = require('knex')({
   client: 'pg',
+  debug: true,
   connection: {
     host: dbConfig.host,
     user: dbConfig.user,
@@ -33,7 +34,6 @@ var knex = require('knex')({
 });
 var bookshelf = require('bookshelf')(knex);
 var models = require('./models')(bookshelf);
-
 
 app.use('/api', billyapi(models));
 app.use(site(models));
