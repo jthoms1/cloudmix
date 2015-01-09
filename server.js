@@ -3,7 +3,6 @@
 var express = require('express');
 var session = require('express-session');
 var morgan = require('morgan');
-var billyapi = require('./api');
 var site = require('./app');
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -45,10 +44,9 @@ var models = require('./models')(bookshelf);
 
 iam.configure(require('./config/iam')(models));
 app.use(iam.middleware());
-app.use('/api', billyapi(models));
+app.use('/api', require('./lib/api')(models));
+app.use('/auth', require('./lib/auth')(models));
 app.use(site(models));
-app.get('/login', function (req, res) {
-});
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
