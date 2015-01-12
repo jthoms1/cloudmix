@@ -27,8 +27,9 @@
     "node-ffprobe": "^1.2.2",
     "pg": "^4.1.1",
     "react": "^0.12.2",
-    "superagent": "^0.21.0",
-    "redis": "^0.12.1"
+    "react-tools": "^0.12.2",
+    "redis": "^0.12.1",
+    "superagent": "^0.21.0"
   },
   "devDependencies": {
     "gulp": "^3.8.10"
