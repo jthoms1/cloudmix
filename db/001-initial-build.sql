@@ -39,6 +39,9 @@ DROP TABLE IF EXISTS "cloudmix"."user";
 CREATE TABLE "cloudmix"."user" (
   "id" SERIAL,
   "email" VARCHAR(127) NOT NULL,
+  "password" VARCHAR(60) NOT NULL,
+  "display_name" VARCHAR(127) NOT NULL,
+  "real_name" VARCHAR(127) NOT NULL,
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
   PRIMARY KEY ("id")

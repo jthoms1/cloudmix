@@ -24,6 +24,6 @@ module.exports = function (trackPath) {
 
     return data;
   }).catch(function(e) {
-    console.log("Error reading file", e);
+    console.log('Error reading file', e);
   });
 };

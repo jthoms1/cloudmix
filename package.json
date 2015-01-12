@@ -9,6 +9,7 @@
     "url": "git://github.com/jthoms1/cloudmix"
   },
   "dependencies": {
+    "bcrypt": "^0.8.0",
     "bluebird": "^2.6.1",
     "body-parser": "^1.10.0",
     "bookshelf": "^0.7.9",
@@ -26,7 +27,8 @@
     "node-ffprobe": "^1.2.2",
     "pg": "^4.1.1",
     "react": "^0.12.2",
-    "superagent": "^0.21.0"
+    "superagent": "^0.21.0",
+    "redis": "^0.12.1"
   },
   "devDependencies": {
     "gulp": "^3.8.10"

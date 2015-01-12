@@ -19,5 +19,5 @@ var bookshelf = require('bookshelf')(knex);
 var models = require('./models')(bookshelf);
 
 glob('data/*.mp3', {}, function (err, files) {
-  files.forEach(
+  console.log(files, models);
 });

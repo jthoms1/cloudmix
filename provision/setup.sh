@@ -26,7 +26,7 @@ echo "Installing Git and Curl"
 sudo apt-get install git curl -y > /dev/null
 
 echo "Installing app specific libs"
-sudo apt-get install libtag1-dev -y > /dev/null
+sudo apt-get install redis-server g++ libtag1-dev -y > /dev/null
 
 # --------------------------------------------------
 # Install Nginx
@@ -46,6 +46,10 @@ sudo apt-get install nodejs -y > /dev/null
 # Dependent global npm installs
 echo "Installing global NPM packages"
 sudo npm install -g pm2 nodemon gulp browserify
+
+# Npm install
+echo "Installing local NPM packages"
+cd $source_dir && npm install
 
 
 # --------------------------------------------------
@@ -89,10 +93,11 @@ sudo service nginx restart > /dev/null
 # --------------------------------------------------
 # Node App Configuration
 # --------------------------------------------------
+
 echo "Configuring and starting Node app."
-sudo -H -u $safeuser_username bash -c "pm2 start $source_dir/server.js --name \"$application_name\" -i 0"
-sudo pm2 startup ubuntu -u $safeuser_username
-sudo -H -u $safeuser_username bash -c "pm2 save"
+#sudo -H -u $safeuser_username bash -c "pm2 start $source_dir/server.js --name \"$application_name\" -i 0"
+#sudo pm2 startup ubuntu -u $safeuser_username
+#sudo -H -u $safeuser_username bash -c "pm2 save"
 
 
 echo "Finished provisioning."
