@@ -29,3 +29,4 @@ module.exports = bookshelf.Model.extend({
       });
   })
 });
+

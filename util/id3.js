@@ -1,7 +1,7 @@
 'use strict';
 
-var Promise = require('bluebird');
-var probe = Promise.promisify(require('node-ffprobe'));
+var BPromise = require('bluebird');
+var probe = BPromise.promisify(require('node-ffprobe'));
 
 module.exports = function (trackPath) {
   return probe(trackPath).then(function(probeData) {

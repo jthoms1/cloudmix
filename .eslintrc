@@ -3,15 +3,17 @@
     "browser": true,
     "node": true
   },
+  "settings": {
+    "ext": "jsx"
+  },
+  "ecmaFeatures": {
+    "jsx": true
+  },
   "rules": {
     "quotes": [2, "single"],
     "eol-last": true
   },
   "globals": {
     "require": true
-  },
-  "settings": {
-    "ecmascript": 6,
-    "jsx": true
   }
 }
