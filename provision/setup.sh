@@ -58,6 +58,11 @@ cd ${source_dir} && npm install
 # Install Postgres 9.3
 # --------------------------------------------------
 echo "Installing Postgres"
+# Set locale so postgres will use utf-8
+sudo update-locale LANG="en_US.UTF-8"
+sudo update-locale LANGUAGE="en_US.UTF-8"
+sudo update-locale LC_ALL="en_US.UTF-8"
+
 # Add the official postgres repo
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - > /dev/null
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" \

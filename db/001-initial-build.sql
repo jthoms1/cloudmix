@@ -15,12 +15,13 @@ DROP TABLE IF EXISTS "cloudmix"."album";
 CREATE TABLE "cloudmix"."album" (
   "id" SERIAL,
   "name" VARCHAR(127) NOT NULL,
-  "year" TIMESTAMP,
+  "year" SMALLINT NOT NULL,
   "artist_id" INTEGER NOT NULL,
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
   PRIMARY KEY ("id"),
-  FOREIGN KEY ("artist_id") REFERENCES "cloudmix"."artist" ("id")
+  FOREIGN KEY ("artist_id") REFERENCES "cloudmix"."artist" ("id"),
+  UNIQUE ("name", "artist_id")
 );
 
 DROP TABLE IF EXISTS "cloudmix"."song";
@@ -36,7 +37,8 @@ CREATE TABLE "cloudmix"."song" (
   "updated_at" TIMESTAMP,
   PRIMARY KEY ("id"),
   FOREIGN KEY ("artist_id") REFERENCES "cloudmix"."artist" ("id"),
-  FOREIGN KEY ("album_id") REFERENCES "cloudmix"."album" ("id")
+  FOREIGN KEY ("album_id") REFERENCES "cloudmix"."album" ("id"),
+  UNIQUE ("name", "album_order", "album_id")
 );
 
 
