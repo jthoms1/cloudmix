@@ -5,7 +5,10 @@ DROP TABLE IF EXISTS "cloudmix"."artist";
 CREATE TABLE "cloudmix"."artist" (
   "id" SERIAL,
   "name" VARCHAR(127) NOT NULL,
-  PRIMARY KEY ("id")
+  "created_at" TIMESTAMP,
+  "updated_at" TIMESTAMP,
+  PRIMARY KEY ("id"),
+  UNIQUE ("name")
 );
 
 DROP TABLE IF EXISTS "cloudmix"."album";
@@ -14,6 +17,8 @@ CREATE TABLE "cloudmix"."album" (
   "name" VARCHAR(127) NOT NULL,
   "year" TIMESTAMP,
   "artist_id" INTEGER NOT NULL,
+  "created_at" TIMESTAMP,
+  "updated_at" TIMESTAMP,
   PRIMARY KEY ("id"),
   FOREIGN KEY ("artist_id") REFERENCES "cloudmix"."artist" ("id")
 );
@@ -44,7 +49,9 @@ CREATE TABLE "cloudmix"."user" (
   "real_name" VARCHAR(127) NOT NULL,
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
-  PRIMARY KEY ("id")
+  PRIMARY KEY ("id"),
+  UNIQUE ("email"),
+  UNIQUE ("display_name")
 );
 
 DROP TABLE IF EXISTS "cloudmix"."playlist";
@@ -78,7 +85,8 @@ CREATE TABLE "cloudmix"."tag" (
   "name" VARCHAR(127),
   "created_at" TIMESTAMP,
   "updated_at" TIMESTAMP,
-  PRIMARY KEY ("id")
+  PRIMARY KEY ("id"),
+  UNIQUE ("name")
 );
 
 DROP TABLE IF EXISTS "cloudmix"."song_tag";

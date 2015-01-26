@@ -5,7 +5,6 @@ var probe = Promise.promisify(require('node-ffprobe'));
 
 module.exports = function (trackPath) {
   return probe(trackPath).then(function(probeData) {
-    console.log(probeData);
     var data = {};
     data.albumArtist = {
       name: probeData.metadata.album_artist
@@ -22,7 +21,6 @@ module.exports = function (trackPath) {
       'album_order': probeData.metadata.track,
       duration: probeData.format.duration
     };
-
-    return data;
+    return Promise.resolve(data);
   });
 };
