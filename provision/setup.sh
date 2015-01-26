@@ -28,7 +28,7 @@ echo "Installing Git and Curl"
 sudo apt-get install git curl -y > /dev/null
 
 echo "Installing app specific libs"
-sudo apt-get install redis-server make g++ libtag1-dev -y > /dev/null
+sudo apt-get install redis-server make g++ libtag1-dev libav-tools -y > /dev/null
 
 # --------------------------------------------------
 # Install Nginx

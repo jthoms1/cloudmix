@@ -1,23 +1,22 @@
 'use strict';
 
+var BPromise = require('bluebird');
 var id3tagger = require('./id3');
 var glob = require('glob');
+var path = require('path');
+var song = require('./models/song');
+var artist = require('./models/artist');
 
-// Setup database connection info
-var dbConfig = require('./config/dbc.json');
-var knex = require('knex')({
-  client: 'pg',
-  debug: true,
-  connection: {
-    host: dbConfig.host,
-    user: dbConfig.user,
-    password: dbConfig.password,
-    database: dbConfig.dbname
-  }
-});
-var bookshelf = require('bookshelf')(knex);
-var models = require('./models')(bookshelf);
+var match = path.join(process.argv[2], '/**/*.mp3');
+var files = glob.sync(match);
 
-glob('data/*.mp3', {}, function (err, files) {
-  console.log(files, models);
-});
+BPromise
+  .map(files, function (filePath) {
+    return id3tagger(filePath);
+  })
+  .then(function(data) {
+    console.log(JSON.stringify(data, null, 2));
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
