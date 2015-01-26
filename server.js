@@ -34,26 +34,11 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// Setup database connection info
-var dbConfig = require('./config/database');
-var knex = require('knex')({
-  client: 'pg',
-  debug: true,
-  connection: {
-    host: dbConfig.host,
-    user: dbConfig.user,
-    password: dbConfig.password,
-    database: dbConfig.dbname
-  }
-});
-var bookshelf = require('bookshelf')(knex);
-var models = require('./models')(bookshelf);
-
-iam.configure(require('./config/iam')(models));
+iam.configure(require('./config/iam'));
 app.use(iam.middleware());
-app.use('/api', require('./lib/api')(models));
-app.use('/auth', require('./lib/auth')(models));
-app.use(site(models));
+app.use('/api', require('./lib/api')(require('./models')));
+app.use('/auth', require('./lib/auth'));
+app.use(site());
 
 app.listen(port);
 console.log('Magic happens on port ' + port);

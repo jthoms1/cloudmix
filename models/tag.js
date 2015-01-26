@@ -1,20 +1,16 @@
 'use strict';
 
-var inflection = require('inflection');
-var tableName = 'tag';
-var modelName = inflection.classify(tableName);
+var bookshelf = require('../database');
+var path = require('path');
+var tableName = path.basename(__filename, path.extname(__filename));
 
-module.exports = function(bookshelf, models) {
+module.exports = bookshelf.Model.extend({
+  tableName: 'cloudmix.' + tableName,
+  idAttribute: 'id',
+  hasTimestamps: ['created_at', 'updated_at'],
 
-  var model = models[modelName] = bookshelf.Model.extend({
-    tableName: 'cloudmix.' + tableName,
-    idAttribute: 'id',
-    hasTimestamps: ['created_at', 'updated_at'],
-
-    song: function() {
-      return this.belongsToMany(models.Song, 'song_tag');
-    }
-  });
-
-  return model;
-};
+  songs: function() {
+    var Song = require('./song');
+    return this.belongsToMany(Song, 'song_tag');
+  }
+});

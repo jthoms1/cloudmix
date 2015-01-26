@@ -1,26 +1,26 @@
 'use strict';
 
-module.exports = function(models) {
-  return function (iam) {
-    iam.getUserToken(function(user, cb) {
-      var token = {
-        id: user.id
-      };
+var User = require('../models/user');
 
-      cb(undefined, token);
-    });
+module.exports = function (iam) {
+  iam.getUserToken(function(user, cb) {
+    var token = {
+      id: user.id
+    };
 
-    iam.getUserFromToken(function(token, cb) {
-      var attrs = {
-        id: token.id
-      };
+    cb(undefined, token);
+  });
 
-      new models.User(attrs)
-        .fetch()
-        .then(function(user) {
-            cb(null, user);
-          })
-          .catch(cb);
-    });
-  };
+  iam.getUserFromToken(function(token, cb) {
+    var attrs = {
+      id: token.id
+    };
+
+    new User(attrs)
+      .fetch()
+      .then(function(user) {
+          cb(null, user);
+        })
+        .catch(cb);
+  });
 };

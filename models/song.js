@@ -1,33 +1,34 @@
 'use strict';
 
-var inflection = require('inflection');
-var tableName = 'song';
-var modelName = inflection.classify(tableName);
+var bookshelf = require('../database');
+var path = require('path');
+var tableName = path.basename(__filename, path.extname(__filename));
 
-module.exports = function(bookshelf, models) {
+module.exports = bookshelf.Model.extend({
+  tableName: 'cloudmix.' + tableName,
+  idAttribute: 'id',
+  hasTimestamps: ['created_at', 'updated_at'],
 
-  var model = models[modelName] = bookshelf.Model.extend({
-    tableName: 'cloudmix.' + tableName,
-    idAttribute: 'id',
-    hasTimestamps: ['created_at', 'updated_at'],
-
-    // Define Relationships
-    tag: function () {
-      return this.belongsToMany(models.Tag, 'song_tag');
-    },
-    playlistSong: function () {
-      return this.hasMany(models.PlaylistSong, 'song_id');
-    },
-    playlist: function () {
-      return this.hasMany(models.Playlist).through(models.PlaylistSong);
-    },
-    artist: function () {
-      return this.belongsTo(models.Artist, 'artist_id');
-    },
-    album: function () {
-      return this.belongsTo(models.Album, 'album_id');
-    }
-  });
-
-  return model;
-};
+  // Define Relationships
+  tag: function () {
+    var Tag = require('./tag');
+    return this.belongsToMany(Tag, 'song_tag');
+  },
+  playlistSong: function () {
+    var PlaylistSong = require('./playlist_song');
+    return this.hasMany(PlaylistSong, 'song_id');
+  },
+  playlist: function () {
+    var Playlist = require('./playlist');
+    var PlaylistSong = require('./playlist_song');
+    return this.hasMany(Playlist).through(PlaylistSong);
+  },
+  artist: function () {
+    var Artist = require('./artist');
+    return this.belongsTo(Artist, 'artist_id');
+  },
+  album: function () {
+    var Album = require('./album');
+    return this.belongsTo(Album, 'album_id');
+  }
+});

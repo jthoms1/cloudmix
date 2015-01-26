@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var React = require('react-tools').React;
+var React = require('react');
 
 var DefaultLayout = React.createClass({
   render: function() {
