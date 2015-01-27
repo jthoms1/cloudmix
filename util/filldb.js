@@ -4,9 +4,9 @@ var BPromise = require('bluebird');
 var id3tagger = require('./id3');
 var glob = require('glob');
 var path = require('path');
-var Song = require('./models/song');
-var Artist = require('./models/artist');
-var Album = require('./models/album');
+var Song = require('../models/song');
+var Artist = require('../models/artist');
+var Album = require('../models/album');
 
 var match = path.join(process.argv[2], '/**/*.mp3');
 var files = glob.sync(match);
