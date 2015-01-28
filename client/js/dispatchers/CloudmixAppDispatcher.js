@@ -29,6 +29,7 @@ var CloudmixAppDispatcher = assign(new Dispatcher(), {
       source: PayloadSources.VIEW_ACTION,
       action: action
     };
+    console.log('action',action);
     this.dispatch(payload);
   }
 });

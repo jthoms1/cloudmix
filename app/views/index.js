@@ -9,7 +9,7 @@ var HelloMessage = React.createClass({
     return (
       <DefaultLayout title={this.props.title}>
         <div>Hello {this.props.name}</div>
-        <div id="main" class="container"></div>
+        <div id="main" className="container"></div>
       </DefaultLayout>
     );
   }
