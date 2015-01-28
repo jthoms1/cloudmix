@@ -10,7 +10,10 @@ var DefaultLayout = React.createClass({
         <head>
           <title>{this.props.title}</title>
         </head>
-        <body>{this.props.children}</body>
+        <body>
+          {this.props.children}
+          <script src="/js/app.js"></script>
+        </body>
       </html>
     );
   }

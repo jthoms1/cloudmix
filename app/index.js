@@ -3,9 +3,14 @@
 var path = require('path');
 var express = require('express');
 var app = express();
+var reactViews = require('express-react-views');
 
-app.set('view engine', 'jsx');
-app.engine('jsx', require('express-react-views').createEngine());
+app.set('view engine', 'js');
+app.engine('js', reactViews.createEngine({
+  jsx: {
+    extension: '.js'
+  }
+}));
 app.set('views', path.join(__dirname, '/views'));
 
 module.exports = function () {
