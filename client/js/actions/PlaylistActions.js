@@ -1,24 +1,24 @@
 'use strict';
 
-var AppConstants = require('../constants/CloudmixConstants.js');
+var ActionTypes = require('../constants/CloudmixConstants.js').ActionTypes;
 var AppDispatcher = require('../dispatchers/CloudmixAppDispatcher.js');
 
 var AppActions = {
   addTrack: function(track) {
     AppDispatcher.handleViewAction({
-      actionType: AppConstants.ADD_TRACK,
+      actionType: ActionTypes.ADD_TRACK,
       track: track
     });
    },
    removeTrack: function(index) {
      AppDispatcher.handleViewAction({
-       actionType: AppConstants.REMOVE_TRACK,
+       actionType: ActionTypes.REMOVE_TRACK,
        index: index
      });
    },
    reorderTrack: function(index) {
      AppDispatcher.handleViewAction({
-       actionType: AppConstants.REORDER_TRACK,
+       actionType: ActionTypes.REORDER_TRACK,
        index: index
      });
    }

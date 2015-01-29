@@ -2,27 +2,34 @@ var AppDispatcher = require('../dispatchers/CloudmixAppDispatcher');
 var ActionTypes = require('../constants/CloudmixConstants').ActionTypes;
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var lodash = require('lodash');
 
 var CHANGE_EVENT = "change";
-
 
 var _catalog = [
   {id:1, title: 'Song 1'},
   {id:2, title: 'Song 2'},
-  {id:3, title: 'Song 3'}
+  {id:3, title: 'Song 3'},
+  {id:4, title: 'Song 4'},
+  {id:5, title: 'Song 5'},
+  {id:6, title: 'Song 6'}
 ];
-var _playlistTracks = [];
+var _playlistTracks = [
+  {id:4, title: 'Song 4'},
+  {id:5, title: 'Song 5'},
+  {id:6, title: 'Song 6'}
+];
 
-function _removeTrack(index){
+function _removeTrack(index) {
   _playlistTracks.splice(index, 1);
 }
 
-function _reorderTrack(index){
+function _reorderTrack(index) {
   _playlistTracks[index].qty++;
 }
 
-function _addTrack(track){
-  if(!track.inCart){
+function _addTrack(track) {
+  if (lodash.findIndex(_playlistTracks, track) === -1) {
     _playlistTracks.push(track);
   }
 }
@@ -51,7 +58,7 @@ var PlaylistStore = assign(EventEmitter.prototype, {
 
   dispatcherIndex: AppDispatcher.register(function(payload) {
     var action = payload.action; // this is our action from handleViewAction
-    switch(action.actionType){
+    switch (action.actionType) {
     case ActionTypes.ADD_TRACK:
       _addTrack(payload.action.track);
       break;
