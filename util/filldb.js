@@ -11,7 +11,7 @@ var Album = require('../models/album');
 var match = path.join(process.argv[2], '/**/*.mp3');
 var files = glob.sync(match);
 
-function findOrCreate (model) {
+function findOrCreate(model) {
   return model.fetch()
   .then(function (data) {
     if (data) {

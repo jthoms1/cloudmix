@@ -19,4 +19,3 @@ module.exports = bookshelf.Model.extend({
     return this.belongsTo(Artist, 'artist_id');
   }
 });
-

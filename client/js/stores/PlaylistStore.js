@@ -1,23 +1,25 @@
+'use strict';
+
 var AppDispatcher = require('../dispatchers/CloudmixAppDispatcher');
 var ActionTypes = require('../constants/CloudmixConstants').ActionTypes;
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var lodash = require('lodash');
 
-var CHANGE_EVENT = "change";
+var CHANGE_EVENT = 'change';
 
 var _catalog = [
-  {id:1, title: 'Song 1'},
-  {id:2, title: 'Song 2'},
-  {id:3, title: 'Song 3'},
-  {id:4, title: 'Song 4'},
-  {id:5, title: 'Song 5'},
-  {id:6, title: 'Song 6'}
+  {id: 1, title: 'Song 1'},
+  {id: 2, title: 'Song 2'},
+  {id: 3, title: 'Song 3'},
+  {id: 4, title: 'Song 4'},
+  {id: 5, title: 'Song 5'},
+  {id: 6, title: 'Song 6'}
 ];
 var _playlistTracks = [
-  {id:4, title: 'Song 4'},
-  {id:5, title: 'Song 5'},
-  {id:6, title: 'Song 6'}
+  {id: 4, title: 'Song 4'},
+  {id: 5, title: 'Song 5'},
+  {id: 6, title: 'Song 6'}
 ];
 
 function _removeTrack(index) {

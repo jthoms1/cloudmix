@@ -19,4 +19,3 @@ module.exports = bookshelf.Model.extend({
     return this.hasOne(Song, 'song_id');
   }
 });
-

@@ -4,8 +4,8 @@ var bookshelf = require('../database');
 var path = require('path');
 var tableName = path.basename(__filename, path.extname(__filename));
 
-var Promise = require('bluebird');
-var bcrypt = Promise.promisifyAll(require('bcrypt'));
+var BPromise = require('bluebird');
+var bcrypt = BPromise.promisifyAll(require('bcrypt'));
 
 module.exports = bookshelf.Model.extend({
   tableName: 'cloudmix.' + tableName,
@@ -18,7 +18,7 @@ module.exports = bookshelf.Model.extend({
     return this.hasMany(Playlist, 'playlist_id');
   }
 }, {
-  login: Promise.method(function(email, password) {
+  login: BPromise.method(function(email, password) {
     if (!email || !password) {
       throw new Error('Email and password are both required');
     }
@@ -29,4 +29,3 @@ module.exports = bookshelf.Model.extend({
       });
   })
 });
-

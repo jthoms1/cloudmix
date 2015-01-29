@@ -52,6 +52,31 @@ module.exports = AddToPlaylist;
 'use strict';
 
 var React = require('react');
+var PlaylistSection = require('./PlaylistSection');
+var CatalogSection = require('./CatalogSection');
+
+var APP = React.createClass({displayName: "APP",
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        React.createElement("h1", null, "Playlist"), 
+        React.createElement(PlaylistSection, null), 
+        React.createElement("h1", null, "Catalog"), 
+        React.createElement(CatalogSection, null)
+      )
+    );
+  }
+});
+
+module.exports = APP;
+
+
+
+},{"./CatalogSection":4,"./PlaylistSection":5,"react":163}],4:[function(require,module,exports){
+/** @jsx React.DOM */
+'use strict';
+
+var React = require('react');
 var PlaylistStore = require('../stores/PlaylistStore.js');
 var AddTrack = require('../components/AddTrackToPlaylist.js');
 var lodash = require('lodash');
@@ -106,7 +131,7 @@ var Catalog = React.createClass({displayName: "Catalog",
 module.exports = Catalog;
 
 
-},{"../components/AddTrackToPlaylist.js":2,"../stores/PlaylistStore.js":10,"lodash":16,"react":163}],4:[function(require,module,exports){
+},{"../components/AddTrackToPlaylist.js":2,"../stores/PlaylistStore.js":10,"lodash":16,"react":163}],5:[function(require,module,exports){
 /** @jsx React.DOM */
 'use strict';
 
@@ -156,7 +181,7 @@ var Playlist = React.createClass({displayName: "Playlist",
 module.exports = Playlist;
 
 
-},{"../components/RemoveTrackFromPlaylist.js":5,"../stores/PlaylistStore.js":10,"react":163}],5:[function(require,module,exports){
+},{"../components/RemoveTrackFromPlaylist.js":6,"../stores/PlaylistStore.js":10,"react":163}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 'use strict';
 
@@ -175,32 +200,7 @@ module.exports = RemoveFromPlaylist;
 
 
 
-},{"../actions/PlaylistActions.js":1,"react":163}],6:[function(require,module,exports){
-/** @jsx React.DOM */
-'use strict';
-
-var React = require('react');
-var PlaylistSection = require('./PlaylistSection');
-var CatalogSection = require('./CatalogSection');
-
-var APP = React.createClass({displayName: "APP",
-  render: function() {
-    return (
-      React.createElement("div", null, 
-        React.createElement("h1", null, "Playlist"), 
-        React.createElement(PlaylistSection, null), 
-        React.createElement("h1", null, "Catalog"), 
-        React.createElement(CatalogSection, null)
-      )
-    );
-  }
-});
-
-module.exports = APP;
-
-
-
-},{"./CatalogSection":3,"./PlaylistSection":4,"react":163}],7:[function(require,module,exports){
+},{"../actions/PlaylistActions.js":1,"react":163}],7:[function(require,module,exports){
 module.exports = {
 
   ActionTypes: {
@@ -261,15 +261,15 @@ module.exports = CloudmixAppDispatcher;
 /** @jsx React.DOM */
 'use strict';
 
-var APP = require('./components/app');
+var App = require('./components/App');
 var React = require('react');
 
 React.render(
-  React.createElement(APP, null),
+  React.createElement(App, null),
   document.getElementById('main'));
 
 
-},{"./components/app":6,"react":163}],10:[function(require,module,exports){
+},{"./components/App":3,"react":163}],10:[function(require,module,exports){
 var AppDispatcher = require('../dispatchers/CloudmixAppDispatcher');
 var ActionTypes = require('../constants/CloudmixConstants').ActionTypes;
 var EventEmitter = require('events').EventEmitter;

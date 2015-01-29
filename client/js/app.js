@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
 'use strict';
 
-var APP = require('./components/app');
+var App = require('./components/App');
 var React = require('react');
 
 React.render(
-  <APP/>,
+  <App/>,
   document.getElementById('main'));

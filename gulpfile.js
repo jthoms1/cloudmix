@@ -45,4 +45,3 @@ gulp.task('default', ['browserify']);
 gulp.task('watch', function() {
   gulp.watch(dir.src + '**/*.*', ['default']);
 });
-

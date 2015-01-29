@@ -2,8 +2,8 @@
 'use strict';
 
 var React = require('react');
-var PlaylistSection = require('./PlaylistSection');
-var CatalogSection = require('./CatalogSection');
+var PlaylistSection = require('./playlist/PlaylistSection');
+var CatalogSection = require('./playlist/CatalogSection');
 
 var APP = React.createClass({
   render: function() {
@@ -19,4 +19,3 @@ var APP = React.createClass({
 });
 
 module.exports = APP;
-

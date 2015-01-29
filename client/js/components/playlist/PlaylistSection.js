@@ -10,17 +10,17 @@ function cartItems() {
 }
 
 var Playlist = React.createClass({
-  getInitialState:function(){
+  getInitialState: function() {
     return cartItems();
   },
-  componentWillMount:function(){
+  componentWillMount: function() {
     PlaylistStore.addChangeListener(this._onChange);
   },
-  _onChange:function(){
+  _onChange: function() {
     this.setState(cartItems());
   },
-  render:function(){
-    var items = this.state.items.map(function(item, i){
+  render: function() {
+    var items = this.state.items.map(function(item, i) {
       return (
         <tr key={i}>
           <td><RemoveTrack index={i} /></td>
