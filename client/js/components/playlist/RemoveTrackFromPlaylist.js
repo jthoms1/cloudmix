@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require('react');
-var PlaylistActions = require('../actions/PlaylistActions.js');
+var PlaylistActions = require('../../actions/PlaylistActions.js');
 
 var RemoveFromPlaylist = React.createClass({
   handleClick: function () {

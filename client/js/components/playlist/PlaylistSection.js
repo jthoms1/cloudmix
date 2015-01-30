@@ -2,8 +2,8 @@
 'use strict';
 
 var React = require('react');
-var PlaylistStore = require('../stores/PlaylistStore.js');
-var RemoveTrack = require('../components/RemoveTrackFromPlaylist.js');
+var PlaylistStore = require('../../stores/PlaylistStore.js');
+var RemoveTrack = require('./RemoveTrackFromPlaylist.js');
 
 function cartItems() {
   return {items: PlaylistStore.getTracks()};
@@ -30,6 +30,7 @@ var Playlist = React.createClass({
     });
     return (
       <table className="table table-hover">
+        <caption>Playlist</caption>
         <thead>
           <tr>
             <th></th>

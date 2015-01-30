@@ -3,7 +3,7 @@
 
 var React = require('react');
 var PlaylistStore = require('../../stores/PlaylistStore.js');
-var AddTrack = require('../../components/AddTrackToPlaylist.js');
+var AddTrack = require('./AddTrackToPlaylist.js');
 var lodash = require('lodash');
 
 function playlistTracks() {
@@ -37,6 +37,7 @@ var Catalog = React.createClass({
     });
     return (
       <table className="table table-hover">
+        <caption>Catalog</caption>
         <thead>
           <tr>
             <th></th>
