@@ -1,14 +1,14 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React = require('react');
-var PlaylistActions = require('../../actions/PlaylistActions.js');
+let React = require('react');
+let PlaylistActions = require('../../actions/PlaylistActions.js');
 
-var AddToPlaylist = React.createClass({
-  handleClick: function() {
+let AddToPlaylist = React.createClass({
+  handleClick () {
     PlaylistActions.addTrack(this.props.track);
   },
-  render: function() {
+  render () {
     return (
       <button onClick={this.handleClick}>Add</button>
     );

@@ -1,21 +1,21 @@
 'use strict';
 
-var CloudmixConstants = require('../constants/CloudmixConstants');
-var Dispatcher = require('flux').Dispatcher;
-var assign = require('object-assign');
+let CloudmixConstants = require('../constants/CloudmixConstants');
+let Dispatcher = require('flux').Dispatcher;
+let assign = require('object-assign');
 
-var PayloadSources = CloudmixConstants.PayloadSources;
+const PayloadSources = CloudmixConstants.PayloadSources;
 
-var CloudmixAppDispatcher = assign(new Dispatcher(), {
+let CloudmixAppDispatcher = assign(new Dispatcher(), {
 
   /**
    * @param {object} action The details of the action, including the action's
    * type and additional data coming from the server.
    */
-  handleServerAction: function(action) {
-    var payload = {
+  handleServerAction (action) {
+    let payload = {
       source: PayloadSources.SERVER_ACTION,
-      action: action
+      action
     };
     this.dispatch(payload);
   },
@@ -24,10 +24,10 @@ var CloudmixAppDispatcher = assign(new Dispatcher(), {
    * @param {object} action The details of the action, including the action's
    * type and additional data coming from the view.
    */
-  handleViewAction: function(action) {
-    var payload = {
+  handleViewAction (action) {
+    let payload = {
       source: PayloadSources.VIEW_ACTION,
-      action: action
+      action
     };
     this.dispatch(payload);
   }

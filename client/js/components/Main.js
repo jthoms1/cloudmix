@@ -1,12 +1,12 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React = require('react');
-var PlaylistSection = require('./playlist/PlaylistSection');
-var CatalogSection = require('./playlist/CatalogSection');
+let React = require('react');
+let PlaylistSection = require('./playlist/PlaylistSection');
+let CatalogSection = require('./playlist/CatalogSection');
 
-var Main = React.createClass({
-  render: function() {
+let Main = React.createClass({
+  render () {
     return (
       <div>
         <PlaylistSection/>

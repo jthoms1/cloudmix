@@ -31,6 +31,7 @@
     "redis": "^0.12.1"
   },
   "devDependencies": {
+    "6to5ify": "^4.0.0",
     "glob": "^4.3.2",
     "gulp": "^3.8.10",
     "gulp-browserify": "^0.5.1",

@@ -1,32 +1,32 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React = require('react');
-var PlaylistStore = require('../../stores/PlaylistStore.js');
-var AddTrack = require('./AddTrackToPlaylist.js');
-var lodash = require('lodash');
+let React = require('react');
+let PlaylistStore = require('../../stores/PlaylistStore.js');
+let AddTrack = require('./AddTrackToPlaylist.js');
+let lodash = require('lodash');
 
-function playlistTracks() {
+function playlistTracks () {
   return {
     ptracks: PlaylistStore.getTracks(),
     ctracks: PlaylistStore.getCatalog()
   };
 }
 
-var Catalog = React.createClass({
-  getInitialState: function() {
+let Catalog = React.createClass({
+  getInitialState () {
     return playlistTracks();
   },
-  componentWillMount: function() {
+  componentWillMount () {
     PlaylistStore.addChangeListener(this._onChange);
   },
-  _onChange: function() {
+  _onChange () {
     this.setState(playlistTracks());
   },
-  render: function() {
-    var self = this;
-    var tracks = self.state.ctracks.map(function(track, i) {
-      var inPlaylist = (lodash.findIndex(self.state.ptracks, track) === -1) ? 'no' : 'yes';
+  render () {
+    let self = this;
+    let tracks = self.state.ctracks.map(function(track, i) {
+      let inPlaylist = (lodash.findIndex(self.state.ptracks, track) === -1) ? 'no' : 'yes';
       return (
         <tr key={i}>
           <td><AddTrack track={track} /></td>

@@ -3,8 +3,18 @@
     "browser": true,
     "node": true
   },
+  "settings": {
+    "ecmascript": 6
+  },
   "ecmaFeatures": {
-    "jsx": true
+    "jsx": true,
+    "blockBindings": true,
+    "defaultParams": true,
+    "forOf": true,
+    "objectLiteralComputedProperties": true,
+    "objectLiteralShorthandMethods": true,
+    "objectLiteralShorthandProperties": true,
+    "templateStrings": true
   },
   "rules": {
     "brace-style": [2, "1tbs", { "allowSingleLine": true}],
@@ -19,7 +29,7 @@
     "no-spaced-func": 2,
     "quotes": [2, "single"],
     "semi": [2, "always"],
-    "space-after-function-name": [2, "never"],
+    "space-after-function-name": [2, "always"],
     "space-after-keywords": [2, "always"],
     "space-before-blocks": [2, "always"]
   }

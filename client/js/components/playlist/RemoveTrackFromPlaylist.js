@@ -1,14 +1,14 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React = require('react');
-var PlaylistActions = require('../../actions/PlaylistActions.js');
+let React = require('react');
+let PlaylistActions = require('../../actions/PlaylistActions.js');
 
-var RemoveFromPlaylist = React.createClass({
-  handleClick: function () {
+let RemoveFromPlaylist = React.createClass({
+  handleClick () {
     PlaylistActions.removeTrack(this.props.index);
   },
-  render: function() {
+  render () {
     return (
       <button onClick={this.handleClick}>Remove</button>
     );

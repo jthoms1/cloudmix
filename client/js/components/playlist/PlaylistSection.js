@@ -1,26 +1,26 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React = require('react');
-var PlaylistStore = require('../../stores/PlaylistStore.js');
-var RemoveTrack = require('./RemoveTrackFromPlaylist.js');
+let React = require('react');
+let PlaylistStore = require('../../stores/PlaylistStore.js');
+let RemoveTrack = require('./RemoveTrackFromPlaylist.js');
 
-function cartItems() {
+function cartItems () {
   return {items: PlaylistStore.getTracks()};
 }
 
-var Playlist = React.createClass({
-  getInitialState: function() {
+let Playlist = React.createClass({
+  getInitialState () {
     return cartItems();
   },
-  componentWillMount: function() {
+  componentWillMount () {
     PlaylistStore.addChangeListener(this._onChange);
   },
-  _onChange: function() {
+  _onChange () {
     this.setState(cartItems());
   },
-  render: function() {
-    var items = this.state.items.map(function(item, i) {
+  render () {
+    let items = this.state.items.map(function(item, i) {
       return (
         <tr key={i}>
           <td><RemoveTrack index={i} /></td>

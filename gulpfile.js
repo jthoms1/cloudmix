@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var util = require('gulp-util');
 var browserify = require('gulp-browserify');
+var to5ify = require('6to5ify');
 //var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 //var dotify = require('gulp-dotify');
@@ -32,7 +33,7 @@ gulp.task('browserify', function() {
   var destination = (util.env.production ? dir.prod : dir.dev) + 'js/';
 
   gulp.src(dir.src + 'js/app.js')
-    .pipe(browserify({transform: 'reactify'}))
+    .pipe(browserify(to5ify))
     .pipe(concat('app.js'))
     .pipe(util.env.production ? uglify() : util.noop())
     .pipe(gulp.dest(destination));
