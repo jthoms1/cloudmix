@@ -5,7 +5,7 @@ let React = require('react');
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let AddTrack = require('./AddTrackToPlaylist.js');
 
-function playlistTracks () {
+function playlistTracks() {
   return {
     ptracks: PlaylistStore.getTracks(),
     ctracks: PlaylistStore.getCatalog()
@@ -13,16 +13,16 @@ function playlistTracks () {
 }
 
 let Catalog = React.createClass({
-  getInitialState () {
+  getInitialState() {
     return playlistTracks();
   },
-  componentWillMount () {
+  componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
-  _onChange () {
+  _onChange() {
     this.setState(playlistTracks());
   },
-  render () {
+  render() {
     let self = this;
     let tracks = self.state.ctracks.map(function(track, i) {
       let inPlaylist = (self.state.ptracks.findIndex(track) === -1) ? 'no' : 'yes';

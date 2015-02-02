@@ -22,7 +22,7 @@ function findOrCreate(model) {
 }
 
 BPromise
-  .map(files, function (filePath) {
+  .map(files, function(filePath) {
     return id3tagger(filePath);
   })
   .each(function(data) {

@@ -5,21 +5,21 @@ let React = require('react');
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let RemoveTrack = require('./RemoveTrackFromPlaylist.js');
 
-function cartItems () {
+function cartItems() {
   return {items: PlaylistStore.getTracks()};
 }
 
 let Playlist = React.createClass({
-  getInitialState () {
+  getInitialState() {
     return cartItems();
   },
-  componentWillMount () {
+  componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
-  _onChange () {
+  _onChange() {
     this.setState(cartItems());
   },
-  render () {
+  render() {
     let items = this.state.items.map(function(item, i) {
       return (
         <tr key={i}>

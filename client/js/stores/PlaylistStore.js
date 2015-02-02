@@ -22,14 +22,15 @@ let _playlistTracks = List([
   {id: 6, title: 'Song 6'}
 ]);
 
-function _removeTrack (index) {
+function _removeTrack(index) {
   _playlistTracks = _playlistTracks.splice(index, 1);
 }
 
-function _reorderTrack (index) {
+function _reorderTrack() {
+
 }
 
-function _addTrack (track) {
+function _addTrack(track) {
   if (_playlistTracks.findIndex(track) === -1) {
     _playlistTracks = _playlistTracks.push(track);
   }
@@ -37,23 +38,23 @@ function _addTrack (track) {
 
 
 let PlaylistStore = assign(EventEmitter.prototype, {
-  emitChange () {
+  emitChange() {
     this.emit(CHANGE_EVENT);
   },
 
-  addChangeListener (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getTracks () {
+  getTracks() {
     return _playlistTracks;
   },
 
-  getCatalog () {
+  getCatalog() {
     return _catalog;
   },
 
