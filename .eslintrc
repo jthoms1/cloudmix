@@ -22,6 +22,7 @@
     "comma-style": [2, "last"],
     "consistent-this": [2, "self"],
     "eol-last": [2, true],
+    "new-cap: 0,
     "no-extra-semi": [2, true],
     "no-lonely-if": [2, true],
     "no-underscore-dangle": false,

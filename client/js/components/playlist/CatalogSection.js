@@ -4,7 +4,6 @@
 let React = require('react');
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let AddTrack = require('./AddTrackToPlaylist.js');
-let lodash = require('lodash');
 
 function playlistTracks () {
   return {
@@ -26,7 +25,7 @@ let Catalog = React.createClass({
   render () {
     let self = this;
     let tracks = self.state.ctracks.map(function(track, i) {
-      let inPlaylist = (lodash.findIndex(self.state.ptracks, track) === -1) ? 'no' : 'yes';
+      let inPlaylist = (self.state.ptracks.findIndex(track) === -1) ? 'no' : 'yes';
       return (
         <tr key={i}>
           <td><AddTrack track={track} /></td>
