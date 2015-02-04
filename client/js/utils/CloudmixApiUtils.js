@@ -4,7 +4,7 @@ var ChatServerActionCreators = require('../actions/ChatServerActionCreators');
 
 module.exports = {
 
-  getAllMessages: function() {
+  getPlaylist: function() {
     // simulate retrieving data from a database
     var rawMessages = JSON.parse(localStorage.getItem('messages'));
 

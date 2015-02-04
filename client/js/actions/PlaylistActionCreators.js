@@ -3,7 +3,7 @@
 var ActionTypes = require('../constants/CloudmixConstants.js').ActionTypes;
 var AppDispatcher = require('../dispatchers/CloudmixAppDispatcher.js');
 
-var AppActions = {
+var PlaylistActionCreators = {
   addTrack: function(track) {
     AppDispatcher.handleViewAction({
       actionType: ActionTypes.ADD_TRACK,
@@ -24,4 +24,4 @@ var AppActions = {
    }
 };
 
-module.exports = AppActions;
+module.exports = PlaylistActionCreators;
