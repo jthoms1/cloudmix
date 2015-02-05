@@ -1,33 +1,15 @@
 'use strict';
 
+let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/CloudmixAppDispatcher');
-let ActionTypes = require('../constants/CloudmixConstants').ActionTypes;
-let EventEmitter = require('events').EventEmitter;
+let PlaylistActions = require('../constants/CloudmixConstants').Playlist;
 let assign = require('object-assign');
 let List = require('immutable').List;
 
-const CHANGE_EVENT = 'change';
-
-let _catalog = List([
-  {id: 1, title: 'Song 1'},
-  {id: 2, title: 'Song 2'},
-  {id: 3, title: 'Song 3'},
-  {id: 4, title: 'Song 4'},
-  {id: 5, title: 'Song 5'},
-  {id: 6, title: 'Song 6'}
-]);
-let _playlistTracks = List([
-  {id: 4, title: 'Song 4'},
-  {id: 5, title: 'Song 5'},
-  {id: 6, title: 'Song 6'}
-]);
+let _playlistTracks = List([]);
 
 function _removeTrack(index) {
   _playlistTracks = _playlistTracks.splice(index, 1);
-}
-
-function _reorderTrack() {
-
 }
 
 function _addTrack(track) {
@@ -36,41 +18,21 @@ function _addTrack(track) {
   }
 }
 
-
-let PlaylistStore = assign(EventEmitter.prototype, {
-  emitChange() {
-    this.emit(CHANGE_EVENT);
-  },
-
-  addChangeListener(callback) {
-    this.on(CHANGE_EVENT, callback);
-  },
-
-  removeChangeListener(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
-  },
-
+let PlaylistStore = assign(BaseStore, {
   getTracks() {
     return _playlistTracks;
   },
 
-  getCatalog() {
-    return _catalog;
-  },
-
   dispatcherIndex: AppDispatcher.register(function(payload) {
     let action = payload.action; // this is our action from handleViewAction
+
     switch (action.actionType) {
-    case ActionTypes.ADD_TRACK:
+    case PlaylistActions.ADD_TRACK:
       _addTrack(payload.action.track);
       break;
 
-    case ActionTypes.REMOVE_TRACK:
+    case PlaylistActions.REMOVE_TRACK:
       _removeTrack(payload.action.index);
-      break;
-
-    case ActionTypes.REORDER_TRACK:
-      _reorderTrack(payload.action.index);
       break;
     }
     PlaylistStore.emitChange();
