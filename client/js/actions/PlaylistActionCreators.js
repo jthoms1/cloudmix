@@ -1,22 +1,27 @@
 'use strict';
 
-var PlaylistAction = require('../constants/CloudmixConstants.js').Playlist;
-var AppDispatcher = require('../dispatchers/CloudmixAppDispatcher.js');
+var PlaylistAction = require('../constants/Constants.js').Playlist;
+var AppDispatcher = require('../dispatchers/Dispatcher.js');
+var PlaylistUtils = require('../utils/PlaylistUtils.js');
 
 var PlaylistActionCreators = {
-  addTrack: function(track) {
+
+  addPlaylistSong: function(playlist, song) {
     AppDispatcher.handleAction({
       actionType: PlaylistAction.ADD_TRACK,
-      track: track
+      playlist: playlist,
+      song: song
     });
-   },
-   removeTrack: function(index) {
-     AppDispatcher.handleAction({
-       actionType: PlaylistAction.REMOVE_TRACK,
-       index: index
-     });
-   },
+    PlaylistUtils.addPlaylistSong(playlist, song);
+  },
 
+  removePlaylistSong: function(playlistSong) {
+    AppDispatcher.handleAction({
+      actionType: PlaylistAction.REMOVE_TRACK,
+      playlistSong: playlistSong
+    });
+   PlaylistUtils.removePlaylistSong(playlistSong);
+  }
 };
 
 module.exports = PlaylistActionCreators;

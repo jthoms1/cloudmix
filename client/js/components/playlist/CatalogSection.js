@@ -3,33 +3,35 @@
 
 let React = require('react');
 let PlaylistStore = require('../../stores/PlaylistStore.js');
+let CatalogStore = require('../../stores/CatalogStore.js');
 let AddTrack = require('./AddTrackToPlaylist.js');
 
-function playlistTracks() {
+function songLists() {
   return {
-    ptracks: PlaylistStore.getTracks(),
-    ctracks: PlaylistStore.getCatalog()
+    playlistSongs: PlaylistStore.getPlaylistSongs(),
+    catalogSongs: CatalogStore.getSongs()
   };
 }
 
 let Catalog = React.createClass({
   getInitialState() {
-    return playlistTracks();
+    return songLists(this.props.playlistId);
   },
   componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
   _onChange() {
-    this.setState(playlistTracks());
+    this.setState(songLists(this.props.playlistId));
   },
   render() {
     let self = this;
-    let tracks = self.state.ctracks.map(function(track, i) {
-      let inPlaylist = (self.state.ptracks.findIndex(track) === -1) ? 'no' : 'yes';
+    let playlist = self.props.playlist;
+    let songs = self.state.catalogSongs.map(function(song, i) {
+      let inPlaylist = (self.state.playlistSongs.findIndex(song) === -1) ? 'no' : 'yes';
       return (
         <tr key={i}>
-          <td><AddTrack track={track} /></td>
-          <td>{track.title}</td>
+          <td><AddTrack playlist={playlist} song={song} /></td>
+          <td>{song.title}</td>
           <td>{inPlaylist}</td>
         </tr>
       );
@@ -45,7 +47,7 @@ let Catalog = React.createClass({
           </tr>
         </thead>
         <tbody>
-          {tracks}
+          {songs}
         </tbody>
       </table>
     );

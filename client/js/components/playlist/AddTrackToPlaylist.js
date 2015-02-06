@@ -6,7 +6,7 @@ let PlaylistActions = require('../../actions/PlaylistActions.js');
 
 let AddToPlaylist = React.createClass({
   handleClick () {
-    PlaylistActions.addTrack(this.props.track);
+    PlaylistActions.addPlaylistSong(this.props.playlist, this.props.song);
   },
   render () {
     return (

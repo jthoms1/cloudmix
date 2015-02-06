@@ -5,25 +5,25 @@ let React = require('react');
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let RemoveTrack = require('./RemoveTrackFromPlaylist.js');
 
-function cartItems() {
-  return {items: PlaylistStore.getTracks()};
+function playlistSongs(playlistId) {
+  return {items: PlaylistStore.getPlaylistSongs(playlistId)};
 }
 
 let Playlist = React.createClass({
   getInitialState() {
-    return cartItems();
+    return playlistSongs(this.props.playlistId);
   },
   componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
   _onChange() {
-    this.setState(cartItems());
+    this.setState(playlistSongs(this.props.playlistId));
   },
   render() {
     let items = this.state.items.map(function(item, i) {
       return (
         <tr key={i}>
-          <td><RemoveTrack index={i} /></td>
+          <td><RemoveTrack playlistSong={item} /></td>
           <td>{item.title}</td>
         </tr>
       );

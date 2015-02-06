@@ -6,7 +6,7 @@ let PlaylistActions = require('../../actions/PlaylistActions.js');
 
 let RemoveFromPlaylist = React.createClass({
   handleClick () {
-    PlaylistActions.removeTrack(this.props.index);
+    PlaylistActions.removePlaylistSong(this.props.playlistSong);
   },
   render () {
     return (

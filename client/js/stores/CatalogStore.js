@@ -8,9 +8,11 @@ let List = require('immutable').List;
 let _catalog = List([]);
 
 let CatalogStore = assign(BaseStore.prototype, {
+
   setCatalog(catalog) {
     _catalog = List(catalog);
   },
+
   getCatalog() {
     let self = this;
 
@@ -18,7 +20,7 @@ let CatalogStore = assign(BaseStore.prototype, {
       return _catalog;
     }
 
-    API.list('songs').then(function(catalog) {
+    API.get('songs').then(function(catalog) {
       _catalog = List(catalog);
       self.emitChange();
     });

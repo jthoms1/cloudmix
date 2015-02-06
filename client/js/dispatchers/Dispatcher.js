@@ -3,7 +3,7 @@
 let Dispatcher = require('flux').Dispatcher;
 let assign = require('object-assign');
 
-let CloudmixAppDispatcher = assign(new Dispatcher(), {
+let AppDispatcher = assign(new Dispatcher(), {
 
   /**
    * @param {object} action The details of the action, including the action's
@@ -17,4 +17,4 @@ let CloudmixAppDispatcher = assign(new Dispatcher(), {
   }
 });
 
-module.exports = CloudmixAppDispatcher;
+module.exports = AppDispatcher;

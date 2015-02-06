@@ -1,26 +1,30 @@
 'use strict';
 
 let BaseStore = require('./BaseStore');
-let AppDispatcher = require('../dispatchers/CloudmixAppDispatcher');
-let PlaylistActions = require('../constants/CloudmixConstants').Playlist;
+let AppDispatcher = require('../dispatchers/Dispatcher');
+let PlaylistActions = require('../constants/Constants').Playlist;
 let assign = require('object-assign');
 let List = require('immutable').List;
 
-let _playlistTracks = List([]);
+let _playlists = List([]);
 
-function _removeTrack(index) {
-  _playlistTracks = _playlistTracks.splice(index, 1);
+function _removeSong(playlistId, playlistSongIndex) {
+  let playlist = _playlists.find(function () { return playlist.id === playlistId })
+  playlist
+  playlist = playlists.splice(index, 1);
+
 }
 
-function _addTrack(track) {
-  if (_playlistTracks.findIndex(track) === -1) {
-    _playlistTracks = _playlistTracks.push(track);
+function _addSong(playlistId, song) {
+  let playlist = _playlists.find(function () { return playlist.id === playlistId })
+  if (playlists.findIndex(song) === -1) {
+    _playlists = _playlists.push(song);
   }
 }
 
 let PlaylistStore = assign(BaseStore, {
-  getTracks() {
-    return _playlistTracks;
+  getPlaylistSongs(playlistId) {
+    return _playlists.filter(;
   },
 
   dispatcherIndex: AppDispatcher.register(function(payload) {
@@ -28,11 +32,11 @@ let PlaylistStore = assign(BaseStore, {
 
     switch (action.actionType) {
     case PlaylistActions.ADD_TRACK:
-      _addTrack(payload.action.track);
+      _addSong(payload.action.track);
       break;
 
     case PlaylistActions.REMOVE_TRACK:
-      _removeTrack(payload.action.index);
+      _removeSong(payload.action.index);
       break;
     }
     PlaylistStore.emitChange();
