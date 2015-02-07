@@ -3,13 +3,15 @@
 
 var React = require('react');
 var DefaultLayout = require('./layouts/default');
+var Main = require('../../client/js/components/Main');
 
 var HelloMessage = React.createClass({
   render: function() {
     return (
       <DefaultLayout title={this.props.title}>
-        <div>Hello {this.props.name}</div>
-        <div id="main" className="container"></div>
+        <div id="main" className="container">
+          <Main/>
+        </div>
       </DefaultLayout>
     );
   }

@@ -13,12 +13,7 @@ app.engine('js', reactViews.createEngine({
 }));
 app.set('views', path.join(__dirname, '/views'));
 
-module.exports = function () {
-
+module.exports = function() {
   app.get('/', require('./routes').index);
-  app.get('/', function (req, res) {
-    res.send('Why hello there.');
-  });
-
   return app;
 };
