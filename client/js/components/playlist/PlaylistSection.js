@@ -2,14 +2,16 @@
 'use strict';
 
 let React = require('react');
-let PlaylistStore = require('../../stores/PlaylistStore.js');
-let RemoveTrack = require('./RemoveTrackFromPlaylist.js');
+let PlaylistStore = require('../../stores/PlaylistStore');
+let SongStore = require('../../stores/SongStore');
+let RemoveSong = require('./RemoveSongFromPlaylist');
 
 function playlistSongs(playlistId) {
-  return {items: PlaylistStore.getPlaylistSongs(playlistId)};
+  let songIds = PlaylistStore.get(playlistId).links.songs;
+  return songIds.map(songId => SongStore.get(songId));
 }
 
-let Playlist = React.createClass({
+let PlaylistSection = React.createClass({
   getInitialState() {
     return playlistSongs(this.props.playlistId);
   },
@@ -20,11 +22,11 @@ let Playlist = React.createClass({
     this.setState(playlistSongs(this.props.playlistId));
   },
   render() {
-    let items = this.state.items.map(function(item, i) {
+    let items = this.state.songs.map((song, index) => {
       return (
-        <tr key={i}>
-          <td><RemoveTrack playlistSong={item} /></td>
-          <td>{item.title}</td>
+        <tr key={index}>
+          <td><RemoveSong playlistId={this.props.playlistId} songIndex={index} /></td>
+          <td>{song.title}</td>
         </tr>
       );
     });
@@ -45,4 +47,4 @@ let Playlist = React.createClass({
   }
 });
 
-module.exports = Playlist;
+module.exports = PlaylistSection;
