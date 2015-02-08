@@ -14,7 +14,7 @@ let SongStore = Object.assign(BaseStore.prototype, {
   },
 
   getSongs(forceUpdate=false) {
-    if (!forceUpdate && _songs.length) {
+    if (!forceUpdate) {
       return _songs;
     }
 

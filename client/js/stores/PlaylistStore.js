@@ -66,7 +66,7 @@ let PlaylistStore = Object.assign(BaseStore, {
   },
 
   getAll(forceUpdate=false) {
-    if (!forceUpdate && _playlists.length) {
+    if (!forceUpdate) {
       return _playlists;
     }
 
