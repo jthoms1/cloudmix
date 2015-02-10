@@ -8,8 +8,8 @@ let AddSong = require('./AddSongToPlaylist.js');
 
 function songLists(playlistId) {
   return {
-    playlistSongs: PlaylistStore.getPlaylist(playlistId),
-    catalogSongs: SongStore.getSongs()
+    playlistSongs: PlaylistStore.get(playlistId),
+    catalogSongs: SongStore.getAll()
   };
 }
 
@@ -24,12 +24,11 @@ let CatalogSection = React.createClass({
     this.setState(songLists(this.props.playlistId));
   },
   render() {
-    let playlist = self.props.playlist;
-    let songs = self.state.catalogSongs.map((song, i) => {
+    let songs = this.state.catalogSongs.map((song, i) => {
       let inPlaylist = (this.state.playlistSongs.findIndex(song) === -1) ? 'no' : 'yes';
       return (
         <tr key={i}>
-          <td><AddSong playlistId={playlist.id} songId={song.id} /></td>
+          <td><AddSong playlistId={this.props.playlistId} songId={song.id} /></td>
           <td>{song.title}</td>
           <td>{inPlaylist}</td>
         </tr>

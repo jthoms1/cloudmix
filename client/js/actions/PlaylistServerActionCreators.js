@@ -1,10 +1,9 @@
 'use strict';
 
-var ServerAction = require('../constants/Constants.js').Server;
+var ServerAction = require('../constants/Constants.js').PlaylistServer;
 var AppDispatcher = require('../dispatchers/Dispatcher.js');
 
 var PlaylistServerActionCreators = {
-
   /**
    * @param {array} playlists Array of all playlists
    */

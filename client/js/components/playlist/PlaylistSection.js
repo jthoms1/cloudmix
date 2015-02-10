@@ -8,7 +8,9 @@ let RemoveSong = require('./RemoveSongFromPlaylist');
 
 function playlistSongs(playlistId) {
   let songIds = PlaylistStore.get(playlistId).links.songs;
-  return songIds.map(songId => SongStore.get(songId));
+  return {
+    songs: songIds.map(songId => SongStore.get(songId))
+  };
 }
 
 let PlaylistSection = React.createClass({

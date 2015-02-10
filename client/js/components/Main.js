@@ -9,8 +9,8 @@ let Main = React.createClass({
   render () {
     return (
       <div>
-        <PlaylistSection/>
-        <CatalogSection/>
+        <PlaylistSection playlistId={2}/>
+        <CatalogSection playlistId={2}/>
       </div>
     );
   }

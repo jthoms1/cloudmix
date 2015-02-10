@@ -3,11 +3,12 @@
 let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/Dispatcher');
 let PlaylistActions = require('../constants/Constants').Playlist;
-let List = require('immutable').List;
+var ServerAction = require('../constants/Constants.js').PlaylistServer;
+let Immutable = require('immutable');
 let PlaylistUtils = require('../utils/PlaylistUtils.js');
 let assign = require('object-assign');
 
-let _playlists = List([]);
+let _playlists = Immutable.fromJS([]);
 
 /**
   * @param {string} playlistId The unique id of the playlist object
@@ -20,8 +21,8 @@ function _removePlaylist(playlistId) {
 /**
   * @param {object} playlist The playlist object to be added
   */
-function _addPlaylist(playlist) {
-  _playlists = _playlists.push(playlist);
+function _addPlaylists(playlists) {
+  _playlists = _playlists.push(playlists);
 }
 
 /**
@@ -56,10 +57,14 @@ function _removeSong(playlistId, songIndex) {
   _playlists = _playlists.set(playlistIndex, playlist);
 }
 
-let PlaylistStore = assign(BaseStore, {
+let PlaylistStore = assign({}, BaseStore, {
 
   get(playlistId) {
     return _playlists.find(playlist => playlist.id === playlistId);
+  },
+
+  set(playlists) {
+    _playlists = Immutable.fromJS(playlists);
   },
 
   getAll(forceUpdate=false) {
@@ -77,7 +82,7 @@ let PlaylistStore = assign(BaseStore, {
 
     switch (action.actionType) {
     case PlaylistActions.ADD_PLAYLIST:
-      _addPlaylist(payload.action.playlist);
+      _addPlaylists(payload.action.playlist);
       break;
 
     case PlaylistActions.UPDATE_PLAYLIST:
@@ -94,6 +99,22 @@ let PlaylistStore = assign(BaseStore, {
 
     case PlaylistActions.REMOVE_SONG:
       _removeSong(payload.action.playlistId, payload.action.songIndex);
+      break;
+
+    case ServerAction.RECEIVE_ALL_PLAYLISTS:
+      PlaylistStore.set(payload.action.playlists);
+      break;
+
+    case ServerAction.RECEIVE_CREATED_PLAYLISTS:
+      _addPlaylists(payload.action.playlist);
+      break;
+
+    case ServerAction.RECEIVE_UPDATED_PLAYLISTS:
+      PlaylistStore.set(payload.action.playlists);
+      break;
+
+    case ServerAction.RECEIVE_CREATED_PLAYLIST_SONGS:
+      _addPlaylists(payload.action.playlist);
       break;
     }
 

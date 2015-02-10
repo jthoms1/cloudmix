@@ -12,6 +12,7 @@ var Main = require('./components/Main');
 var Playlist = require('./components/playlist/PlaylistSection');
 var Catalog = require('./components/playlist/CatalogSection');
 var SongServerActionCreators = require('./actions/SongServerActionCreators');
+var PlaylistServerActionCreators = require('./actions/PlaylistServerActionCreators');
 
 SongServerActionCreators.receiveAllSongs([
   {
@@ -41,6 +42,18 @@ SongServerActionCreators.receiveAllSongs([
     explicit: null,
     created_at: '2015-01-26T17:26:17.662Z',
     updated_at: '2015-01-26T17:26:17.662Z'
+  }
+]);
+
+PlaylistServerActionCreators.receiveAllPlaylists([
+  {
+    id: 2,
+    title: 'Test Josh',
+    description: "Josh's Test Playlist",
+    user_id: 1,
+    created_at: null,
+    updated_at: null,
+    links: {songs: [1]}
   }
 ]);
 
