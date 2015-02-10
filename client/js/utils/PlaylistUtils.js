@@ -1,6 +1,6 @@
 'use strict';
 
-let PlaylistActionCreators = require('../actions/PlaylistActionCreators');
+let ServerActionCreators = require('../actions/PlaylistServerActionCreators');
 let API = require('./ApiUtils');
 
 module.exports = {
@@ -11,8 +11,8 @@ module.exports = {
    */
   create(playlist) {
     API.create('playlists', [playlist])
-      .then((newPlaylist) => {
-        PlaylistActionCreators.receiveCreatedPlaylists(newPlaylist);
+      .then((newPlaylists) => {
+        ServerActionCreators.receiveCreated(newPlaylists);
       });
   },
 
@@ -37,19 +37,18 @@ module.exports = {
   },
 
   /**
-   * @param {string} playlistId The unique id of the playlist object
-   * @param {integer} songInex The unique id of the song object
+   *
    */
-  getPlaylists() {
+  getAll() {
     API.get('playlists')
       .then(function (playlists) {
-        PlaylistActionCreators.receiveAll(playlists);
+        ServerActionCreators.receiveAll(playlists);
       });
   },
 
   /**
    * @param {string} playlistId The unique id of the playlist object
-   * @param {integer} songInex The unique id of the song object
+   * @param {integer} songId The unique id of the song object
    */
   createPlaylistSong(playlistId, songId, playlistOrder) {
     let playlistSong = {
@@ -60,7 +59,7 @@ module.exports = {
 
     API.create('playlist_songs', [playlistSong])
       .then((newPlaylistSongs) => {
-        PlaylistActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
+        ServerActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
       });
   },
 

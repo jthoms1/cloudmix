@@ -15,7 +15,7 @@ var Catalog = require("./components/playlist/CatalogSection");
 var SongServerActionCreators = require("./actions/SongServerActionCreators");
 var PlaylistServerActionCreators = require("./actions/PlaylistServerActionCreators");
 
-SongServerActionCreators.receiveAllSongs([{
+SongServerActionCreators.receiveAll([{
   id: 1,
   name: "Easy Muffin",
   duration: {
@@ -43,7 +43,7 @@ SongServerActionCreators.receiveAllSongs([{
   updated_at: "2015-01-26T17:26:17.662Z"
 }]);
 
-PlaylistServerActionCreators.receiveAllPlaylists([{
+PlaylistServerActionCreators.receiveAll([{
   id: 2,
   title: "Test Josh",
   description: "Josh's Test Playlist",
@@ -189,10 +189,11 @@ var ServerAction = require("../constants/Constants.js").PlaylistServer;
 var AppDispatcher = require("../dispatchers/Dispatcher.js");
 
 var PlaylistServerActionCreators = {
+
   /**
    * @param {array} playlists Array of all playlists
    */
-  receiveAllPlaylists: function receiveAllPlaylists(playlists) {
+  receiveAll: function receiveAll(playlists) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_ALL_PLAYLISTS,
       playlists: playlists
@@ -202,7 +203,7 @@ var PlaylistServerActionCreators = {
   /**
    * @param {array} playlists Array of all playlists
    */
-  receiveCreatedPlaylists: function receiveCreatedPlaylists(playlists) {
+  receiveCreated: function receiveCreated(playlists) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_CREATED_PLAYLISTS,
       playlists: playlists
@@ -212,7 +213,7 @@ var PlaylistServerActionCreators = {
   /**
    * @param {array} playlists Array of all playlists
    */
-  receiveUpdatedPlaylists: function receiveUpdatedPlaylists(playlists) {
+  receiveUpdated: function receiveUpdated(playlists) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_UPDATED_PLAYLISTS,
       playlists: playlists
@@ -243,7 +244,7 @@ var SongServerActionCreators = {
   /**
     * @param {array} playlists Array of all playlists
     */
-  receiveAllSongs: function receiveAllSongs(songs) {
+  receiveAll: function receiveAll(songs) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_ALL_SONGS,
       songs: songs
@@ -563,9 +564,8 @@ module.exports = BaseStore;
 var BaseStore = require("./BaseStore");
 var AppDispatcher = require("../dispatchers/Dispatcher");
 var PlaylistActions = require("../constants/Constants").Playlist;
-var ServerAction = require("../constants/Constants.js").PlaylistServer;
+var ServerAction = require("../constants/Constants").PlaylistServer;
 var Immutable = require("immutable");
-var PlaylistUtils = require("../utils/PlaylistUtils.js");
 var assign = require("object-assign");
 
 var _playlists = Immutable.fromJS([]);
@@ -625,6 +625,16 @@ function _removeSong(playlistId, songIndex) {
   _playlists = _playlists.set(playlistIndex, playlist);
 }
 
+/**
+ * @param {array} playlists The complete list of playlists.
+ */
+function _setAll(playlists) {
+  _playlists = Immutable.fromJS(playlists);
+}
+
+/**
+ * PlaylistStore - Contains all application playlists
+ */
 var PlaylistStore = assign({}, BaseStore, {
 
   get: function get(playlistId) {
@@ -633,17 +643,13 @@ var PlaylistStore = assign({}, BaseStore, {
     });
   },
 
-  set: function set(playlists) {
-    _playlists = Immutable.fromJS(playlists);
-  },
-
   getAll: function getAll() {
     var forceUpdate = arguments[0] === undefined ? false : arguments[0];
     if (!forceUpdate) {
       return _playlists;
     }
 
-    PlaylistUtils.getPlaylists();
+
 
     return null;
   },
@@ -652,8 +658,14 @@ var PlaylistStore = assign({}, BaseStore, {
     var action = payload.action; // this is our action from handleViewAction
 
     switch (action.actionType) {
+
+      /**
+       * Playlist Add/Update/Delete Methods
+       */
       case PlaylistActions.ADD_PLAYLIST:
-        _addPlaylists(payload.action.playlist);
+      case ServerAction.RECEIVE_CREATED_PLAYLISTS:
+      case ServerAction.RECEIVE_UPDATED_PLAYLISTS:
+        _addPlaylists(payload.action.playlists);
         break;
 
       case PlaylistActions.UPDATE_PLAYLIST:
@@ -664,6 +676,9 @@ var PlaylistStore = assign({}, BaseStore, {
         _removePlaylist(payload.action.playlistId);
         break;
 
+      /**
+       * Playlist Content Methods
+       */
       case PlaylistActions.ADD_SONG:
         _addSong(payload.action.playlistId, payload.action.songId);
         break;
@@ -672,20 +687,11 @@ var PlaylistStore = assign({}, BaseStore, {
         _removeSong(payload.action.playlistId, payload.action.songIndex);
         break;
 
+      /**
+       * Playlist Store Reset
+       */
       case ServerAction.RECEIVE_ALL_PLAYLISTS:
-        PlaylistStore.set(payload.action.playlists);
-        break;
-
-      case ServerAction.RECEIVE_CREATED_PLAYLISTS:
-        _addPlaylists(payload.action.playlist);
-        break;
-
-      case ServerAction.RECEIVE_UPDATED_PLAYLISTS:
-        PlaylistStore.set(payload.action.playlists);
-        break;
-
-      case ServerAction.RECEIVE_CREATED_PLAYLIST_SONGS:
-        _addPlaylists(payload.action.playlist);
+        _setAll(payload.action.playlists);
         break;
     }
 
@@ -697,18 +703,27 @@ var PlaylistStore = assign({}, BaseStore, {
 
 module.exports = PlaylistStore;
 
-},{"../constants/Constants":10,"../constants/Constants.js":10,"../dispatchers/Dispatcher":11,"../utils/PlaylistUtils.js":16,"./BaseStore":12,"immutable":26,"object-assign":27}],14:[function(require,module,exports){
+},{"../constants/Constants":10,"../dispatchers/Dispatcher":11,"./BaseStore":12,"immutable":26,"object-assign":27}],14:[function(require,module,exports){
 "use strict";
 
 var BaseStore = require("./BaseStore");
 var AppDispatcher = require("../dispatchers/Dispatcher");
 var SongServerActions = require("../constants/Constants").SongServer;
-var API = require("../utils/ApiUtils");
 var Immutable = require("immutable");
 var assign = require("object-assign");
 
 var _songs = Immutable.fromJS([]);
 
+/**
+ * @param {array} songs The complete list of songs.
+ */
+function _setAll(songs) {
+  _songs = Immutable.fromJS(songs);
+}
+
+/**
+ * SongStore - Contains all songs
+ */
 var SongStore = assign({}, BaseStore, {
 
   get: function get(songId) {
@@ -717,21 +732,11 @@ var SongStore = assign({}, BaseStore, {
     });
   },
 
-  set: function set(songs) {
-    _songs = Immutable.fromJS(songs);
-    this.emitChange();
-  },
-
   getAll: function getAll() {
-    var _this = this;
     var forceUpdate = arguments[0] === undefined ? false : arguments[0];
     if (!forceUpdate) {
       return _songs;
     }
-
-    API.get("songs").then(function (songs) {
-      _this.set(songs);
-    });
 
     return null;
   },
@@ -741,15 +746,17 @@ var SongStore = assign({}, BaseStore, {
 
     switch (action.actionType) {
       case SongServerActions.RECEIVE_ALL_SONGS:
-        SongStore.set(payload.action.songs);
+        _setAll(payload.action.songs);
         break;
     }
+
+    SongStore.emitChange();
   })
 });
 
 module.exports = SongStore;
 
-},{"../constants/Constants":10,"../dispatchers/Dispatcher":11,"../utils/ApiUtils":15,"./BaseStore":12,"immutable":26,"object-assign":27}],15:[function(require,module,exports){
+},{"../constants/Constants":10,"../dispatchers/Dispatcher":11,"./BaseStore":12,"immutable":26,"object-assign":27}],15:[function(require,module,exports){
 "use strict";
 
 var request = require("superagent");
@@ -809,7 +816,7 @@ module.exports = {
 },{"superagent":218}],16:[function(require,module,exports){
 "use strict";
 
-var PlaylistActionCreators = require("../actions/PlaylistActionCreators");
+var ServerActionCreators = require("../actions/PlaylistServerActionCreators");
 var API = require("./ApiUtils");
 
 module.exports = {
@@ -819,8 +826,8 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   create: function create(playlist) {
-    API.create("playlists", [playlist]).then(function (newPlaylist) {
-      PlaylistActionCreators.receiveCreatedPlaylists(newPlaylist);
+    API.create("playlists", [playlist]).then(function (newPlaylists) {
+      ServerActionCreators.receiveCreated(newPlaylists);
     });
   },
 
@@ -841,18 +848,17 @@ module.exports = {
   },
 
   /**
-   * @param {string} playlistId The unique id of the playlist object
-   * @param {integer} songInex The unique id of the song object
+   *
    */
-  getPlaylists: function getPlaylists() {
+  getAll: function getAll() {
     API.get("playlists").then(function (playlists) {
-      PlaylistActionCreators.receiveAll(playlists);
+      ServerActionCreators.receiveAll(playlists);
     });
   },
 
   /**
    * @param {string} playlistId The unique id of the playlist object
-   * @param {integer} songInex The unique id of the song object
+   * @param {integer} songId The unique id of the song object
    */
   createPlaylistSong: function createPlaylistSong(playlistId, songId, playlistOrder) {
     var playlistSong = {
@@ -862,7 +868,7 @@ module.exports = {
     };
 
     API.create("playlist_songs", [playlistSong]).then(function (newPlaylistSongs) {
-      PlaylistActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
+      ServerActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
     });
   },
 
@@ -875,7 +881,7 @@ module.exports = {
   }
 };
 
-},{"../actions/PlaylistActionCreators":2,"./ApiUtils":15}],17:[function(require,module,exports){
+},{"../actions/PlaylistServerActionCreators":3,"./ApiUtils":15}],17:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *

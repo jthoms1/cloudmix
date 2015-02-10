@@ -4,10 +4,11 @@ var ServerAction = require('../constants/Constants.js').PlaylistServer;
 var AppDispatcher = require('../dispatchers/Dispatcher.js');
 
 var PlaylistServerActionCreators = {
+
   /**
    * @param {array} playlists Array of all playlists
    */
-  receiveAllPlaylists(playlists) {
+  receiveAll(playlists) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_ALL_PLAYLISTS,
       playlists: playlists
@@ -17,7 +18,7 @@ var PlaylistServerActionCreators = {
   /**
    * @param {array} playlists Array of all playlists
    */
-  receiveCreatedPlaylists(playlists) {
+  receiveCreated(playlists) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_CREATED_PLAYLISTS,
       playlists: playlists
@@ -27,7 +28,7 @@ var PlaylistServerActionCreators = {
   /**
    * @param {array} playlists Array of all playlists
    */
-  receiveUpdatedPlaylists(playlists) {
+  receiveUpdated(playlists) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_UPDATED_PLAYLISTS,
       playlists: playlists

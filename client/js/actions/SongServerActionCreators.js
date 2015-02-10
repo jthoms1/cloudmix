@@ -8,7 +8,7 @@ var SongServerActionCreators = {
   /**
     * @param {array} playlists Array of all playlists
     */
-  receiveAllSongs(songs) {
+  receiveAll(songs) {
     AppDispatcher.handleAction({
       actionType: ServerAction.RECEIVE_ALL_SONGS,
       songs: songs

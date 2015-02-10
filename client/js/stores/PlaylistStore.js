@@ -3,9 +3,8 @@
 let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/Dispatcher');
 let PlaylistActions = require('../constants/Constants').Playlist;
-var ServerAction = require('../constants/Constants.js').PlaylistServer;
+var ServerAction = require('../constants/Constants').PlaylistServer;
 let Immutable = require('immutable');
-let PlaylistUtils = require('../utils/PlaylistUtils.js');
 let assign = require('object-assign');
 
 let _playlists = Immutable.fromJS([]);
@@ -57,14 +56,20 @@ function _removeSong(playlistId, songIndex) {
   _playlists = _playlists.set(playlistIndex, playlist);
 }
 
+/**
+ * @param {array} playlists The complete list of playlists.
+ */
+function _setAll(playlists) {
+  _playlists = Immutable.fromJS(playlists);
+}
+
+/**
+ * PlaylistStore - Contains all application playlists
+ */
 let PlaylistStore = assign({}, BaseStore, {
 
   get(playlistId) {
     return _playlists.find(playlist => playlist.id === playlistId);
-  },
-
-  set(playlists) {
-    _playlists = Immutable.fromJS(playlists);
   },
 
   getAll(forceUpdate=false) {
@@ -72,7 +77,7 @@ let PlaylistStore = assign({}, BaseStore, {
       return _playlists;
     }
 
-    PlaylistUtils.getPlaylists();
+
 
     return null;
   },
@@ -81,8 +86,14 @@ let PlaylistStore = assign({}, BaseStore, {
     let action = payload.action; // this is our action from handleViewAction
 
     switch (action.actionType) {
+
+    /**
+     * Playlist Add/Update/Delete Methods
+     */
     case PlaylistActions.ADD_PLAYLIST:
-      _addPlaylists(payload.action.playlist);
+    case ServerAction.RECEIVE_CREATED_PLAYLISTS:
+    case ServerAction.RECEIVE_UPDATED_PLAYLISTS:
+      _addPlaylists(payload.action.playlists);
       break;
 
     case PlaylistActions.UPDATE_PLAYLIST:
@@ -93,6 +104,9 @@ let PlaylistStore = assign({}, BaseStore, {
       _removePlaylist(payload.action.playlistId);
       break;
 
+    /**
+     * Playlist Content Methods
+     */
     case PlaylistActions.ADD_SONG:
       _addSong(payload.action.playlistId, payload.action.songId);
       break;
@@ -101,20 +115,11 @@ let PlaylistStore = assign({}, BaseStore, {
       _removeSong(payload.action.playlistId, payload.action.songIndex);
       break;
 
+    /**
+     * Playlist Store Reset
+     */
     case ServerAction.RECEIVE_ALL_PLAYLISTS:
-      PlaylistStore.set(payload.action.playlists);
-      break;
-
-    case ServerAction.RECEIVE_CREATED_PLAYLISTS:
-      _addPlaylists(payload.action.playlist);
-      break;
-
-    case ServerAction.RECEIVE_UPDATED_PLAYLISTS:
-      PlaylistStore.set(payload.action.playlists);
-      break;
-
-    case ServerAction.RECEIVE_CREATED_PLAYLIST_SONGS:
-      _addPlaylists(payload.action.playlist);
+      _setAll(payload.action.playlists);
       break;
     }
 

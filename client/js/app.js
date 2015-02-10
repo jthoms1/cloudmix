@@ -14,7 +14,7 @@ var Catalog = require('./components/playlist/CatalogSection');
 var SongServerActionCreators = require('./actions/SongServerActionCreators');
 var PlaylistServerActionCreators = require('./actions/PlaylistServerActionCreators');
 
-SongServerActionCreators.receiveAllSongs([
+SongServerActionCreators.receiveAll([
   {
     id: 1,
     name: 'Easy Muffin',
@@ -45,7 +45,7 @@ SongServerActionCreators.receiveAllSongs([
   }
 ]);
 
-PlaylistServerActionCreators.receiveAllPlaylists([
+PlaylistServerActionCreators.receiveAll([
   {
     id: 2,
     title: 'Test Josh',

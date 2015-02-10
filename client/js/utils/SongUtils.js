@@ -7,13 +7,13 @@ module.exports = {
   /**
    *
    */
-  getSongs() {
+  getAll() {
     API.get('songs', {
         'include': ['album.artist'].join(),
         'limit': 0
       })
-      .then(function (catalogList) {
-        SongServerActionCreators.receiveAll(catalogList);
+      .then(function (songs) {
+        SongServerActionCreators.receiveAll(songs);
       });
   }
 };
