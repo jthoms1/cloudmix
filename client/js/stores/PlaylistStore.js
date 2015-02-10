@@ -5,6 +5,7 @@ let AppDispatcher = require('../dispatchers/Dispatcher');
 let PlaylistActions = require('../constants/Constants').Playlist;
 let List = require('immutable').List;
 let PlaylistUtils = require('../utils/PlaylistUtils.js');
+let assign = require('object-assign');
 
 let _playlists = List([]);
 
@@ -55,7 +56,7 @@ function _removeSong(playlistId, songIndex) {
   _playlists = _playlists.set(playlistIndex, playlist);
 }
 
-let PlaylistStore = Object.assign(BaseStore, {
+let PlaylistStore = assign(BaseStore, {
 
   get(playlistId) {
     return _playlists.find(playlist => playlist.id === playlistId);

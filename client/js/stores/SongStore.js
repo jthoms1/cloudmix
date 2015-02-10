@@ -1,12 +1,15 @@
 'use strict';
 
 let BaseStore = require('./BaseStore');
-let API = require('../util/API');
+let AppDispatcher = require('../dispatchers/Dispatcher');
+let SongServerActions = require('../constants/Constants').SongServer;
+let API = require('../utils/ApiUtils');
 let List = require('immutable').List;
+let assign = require('object-assign');
 
 let _songs = List([]);
 
-let SongStore = Object.assign(BaseStore.prototype, {
+let SongStore = assign(BaseStore, {
 
   setSongs(songs) {
     _songs = List(songs);
@@ -23,7 +26,17 @@ let SongStore = Object.assign(BaseStore.prototype, {
     });
 
     return null;
-  }
+  },
+
+  dispatcherIndex: AppDispatcher.register((payload) => {
+    let action = payload.action; // this is our action from handleViewAction
+
+    switch (action.actionType) {
+    case SongServerActions.RECEIVE_ALL_SONGS:
+      SongStore.setSongs(payload.action.songs);
+      break;
+    }
+  })
 });
 
 module.exports = SongStore;

@@ -4,7 +4,7 @@
 let React = require('react');
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let SongStore = require('../../stores/SongStore.js');
-let AddTrack = require('./AddTrackToPlaylist.js');
+let AddSong = require('./AddSongToPlaylist.js');
 
 function songLists(playlistId) {
   return {
@@ -29,7 +29,7 @@ let CatalogSection = React.createClass({
       let inPlaylist = (this.state.playlistSongs.findIndex(song) === -1) ? 'no' : 'yes';
       return (
         <tr key={i}>
-          <td><AddTrack playlistId={playlist.id} songId={song.id} /></td>
+          <td><AddSong playlistId={playlist.id} songId={song.id} /></td>
           <td>{song.title}</td>
           <td>{inPlaylist}</td>
         </tr>

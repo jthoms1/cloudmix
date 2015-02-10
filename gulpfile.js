@@ -2,16 +2,15 @@
 
 var gulp = require('gulp');
 var util = require('gulp-util');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
 var to5ify = require('6to5ify');
 //var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
 //var dotify = require('gulp-dotify');
 //var header = require('gulp-header');
 //var footer = require('gulp-footer');
 //var minifyCSS = require('gulp-minify-css');
 //var minifyHTML = require('gulp-minify-html');
-var concat = require('gulp-concat');
+var source = require('vinyl-source-stream');
 
 var dir = {
   dev: 'public/',
@@ -31,11 +30,28 @@ gulp.task('css', function() {
 
 gulp.task('browserify', function() {
   var destination = (util.env.production ? dir.prod : dir.dev) + 'js/';
-
+  /*
   gulp.src(dir.src + 'js/app.js')
     .pipe(browserify(to5ify))
     .pipe(concat('app.js'))
     .pipe(util.env.production ? uglify() : util.noop())
+    .pipe(gulp.dest(destination));
+  */
+
+  // create new bundle
+  var b = browserify();
+  b.transform(to5ify);
+  b.add('./' + dir.src + 'js/app.js');
+  // start bundling
+  return b.bundle()
+    .on('error', function(err) {
+      // print the error (can replace with gulp-util)
+      console.log(err.message);
+      // end this stream
+      this.emit('end');
+    })
+    .pipe(source('app.js'))
+    // pipe other plugin here if you want
     .pipe(gulp.dest(destination));
 });
 

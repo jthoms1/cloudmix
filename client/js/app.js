@@ -11,6 +11,38 @@ var RouteHandler = Router.RouteHandler;
 var Main = require('./components/Main');
 var Playlist = require('./components/playlist/PlaylistSection');
 var Catalog = require('./components/playlist/CatalogSection');
+var SongServerActionCreators = require('./actions/SongServerActionCreators');
+
+SongServerActionCreators.receiveAllSongs([
+  {
+    id: 1,
+    name: 'Easy Muffin',
+    duration: {
+      minutes: 5,
+      seconds: 2
+    },
+    album_order: 1,
+    artist_id: 1,
+    album_id: 1,
+    explicit: null,
+    created_at: '2015-01-26T17:26:17.631Z',
+    updated_at: '2015-01-26T17:26:17.631Z'
+  },
+  {
+    id: 2,
+    name: 'Creatures',
+    duration: {
+      minutes: 5,
+      seconds: 22
+    },
+    album_order: 10,
+    artist_id: 1,
+    album_id: 1,
+    explicit: null,
+    created_at: '2015-01-26T17:26:17.662Z',
+    updated_at: '2015-01-26T17:26:17.662Z'
+  }
+]);
 
 var App = React.createClass({
   render: function() {
