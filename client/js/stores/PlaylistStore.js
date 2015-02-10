@@ -4,6 +4,7 @@ let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/Dispatcher');
 let PlaylistActions = require('../constants/Constants').Playlist;
 let List = require('immutable').List;
+let PlaylistUtils = require('../utils/PlaylistUtils.js');
 
 let _playlists = List([]);
 
@@ -27,7 +28,7 @@ function _addPlaylist(playlist) {
   * @param {object} playlist The playlist object to be updated
   */
 function _updatePlaylist(playlistId, playlist) {
-  let playlistIndex = _playlists.findIndex(playlist => playlist.id === playlistId);
+  let index = _playlists.findIndex(playlist => playlist.id === playlistId);
   _playlists = _playlists.set(index, playlist);
 }
 
@@ -43,23 +44,18 @@ function _addSong(playlistId, songId) {
 
 /**
   * @param {string} playlistId The unique id of the playlist object
-  * @param {integer} songInex The unique id of the song object
+  * @param {integer} songIndex The unique id of the song object
   */
 function _removeSong(playlistId, songIndex) {
   let playlistIndex = _playlists.findIndex(playlist => playlist.id === playlistId);
   let playlist = _playlists.get(playlistIndex);
   let songArray = playlist.links.songs;
 
-  playlist.links.songs = songArray.splice(songlindex,1);
+  playlist.links.songs = songArray.splice(songIndex, 1);
   _playlists = _playlists.set(playlistIndex, playlist);
 }
 
 let PlaylistStore = Object.assign(BaseStore, {
-
-  set(playlists) {
-    _playlists = List(playlists);
-    this.emitChange();
-  },
 
   get(playlistId) {
     return _playlists.find(playlist => playlist.id === playlistId);
@@ -70,9 +66,7 @@ let PlaylistStore = Object.assign(BaseStore, {
       return _playlists;
     }
 
-    API.get('playlists').then(playlists => {
-      this.set(playlists);
-    });
+    PlaylistUtils.getPlaylists();
 
     return null;
   },

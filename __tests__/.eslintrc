@@ -1,8 +1,8 @@
 {
   "env": {
     "jasmine": true,
-  }
-  "globals: {
+  },
+  "globals": {
     "jest": true
   }
 }

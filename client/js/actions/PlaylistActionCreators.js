@@ -6,6 +6,10 @@ var PlaylistUtils = require('../utils/PlaylistUtils.js');
 
 var PlaylistActionCreators = {
 
+  /**
+    * @param {string} playlistId The unique id of the playlist object
+    * @param {integer} songInex The unique id of the song object
+    */
   create(playlist) {
     AppDispatcher.handleAction({
       actionType: PlaylistAction.ADD_PLAYLIST,
@@ -14,6 +18,10 @@ var PlaylistActionCreators = {
     PlaylistUtils.create(playlist);
   },
 
+  /**
+    * @param {string} playlistId The unique id of the playlist object
+    * @param {integer} songInex The unique id of the song object
+    */
   update(playlistId, playlist) {
     AppDispatcher.handleAction({
       actionType: PlaylistAction.UPDATE_PLAYLIST,
@@ -23,6 +31,10 @@ var PlaylistActionCreators = {
     PlaylistUtils.update(playlistId, playlist);
   },
 
+  /**
+    * @param {string} playlistId The unique id of the playlist object
+    * @param {integer} songInex The unique id of the song object
+    */
   destroy(playlistId) {
     AppDispatcher.handleAction({
       actionType: PlaylistAction.REMOVE_PLAYLIST,
@@ -31,18 +43,26 @@ var PlaylistActionCreators = {
     PlaylistUtils.destroy(playlistId);
   },
 
+  /**
+    * @param {string} playlistId The unique id of the playlist object
+    * @param {integer} songInex The unique id of the song object
+    */
   addSong(playlistId, songId) {
     AppDispatcher.handleAction({
-      actionType: PlaylistAction.ADD_SONG,
+      actionType: PlaylistAction.ADD_PLAYLIST_SONG,
       playlistId: playlistId,
       songId: songId
     });
     PlaylistUtils.createPlaylistSong(playlistId, songId);
   },
 
+  /**
+    * @param {string} playlistId The unique id of the playlist object
+    * @param {integer} songInex The unique id of the song object
+    */
   removeSong(playlistId, songIndex) {
     AppDispatcher.handleAction({
-      actionType: PlaylistAction.REMOVE_SONG,
+      actionType: PlaylistAction.REMOVE_PLAYLIST_SONG,
       playlistId: playlistId,
       songIndex: songIndex
     });
