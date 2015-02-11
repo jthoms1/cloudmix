@@ -282,10 +282,12 @@ module.exports = Main;
 "use strict";
 
 var React = require("react");
+var PureRenderMixin = require("react").addons.PureRenderMixin;
 var PlaylistActions = require("../../actions/PlaylistActionCreators");
 
 var AddSongToPlaylist = React.createClass({
   displayName: "AddSongToPlaylist",
+  mixins: [PureRenderMixin],
   handleClick: function handleClick() {
     PlaylistActions.addSong(this.props.playlistId, this.props.songId);
   },
@@ -304,33 +306,38 @@ module.exports = AddSongToPlaylist;
 "use strict";
 
 var React = require("react");
+var PureRenderMixin = require("react").addons.PureRenderMixin;
 var PlaylistStore = require("../../stores/PlaylistStore.js");
 var SongStore = require("../../stores/SongStore.js");
 var AddSong = require("./AddSongToPlaylist.js");
 
-function songLists(playlistId) {
+function getState(playlistId) {
   return {
-    playlistSongs: PlaylistStore.get(playlistId).getIn(["links", "songs"]),
-    catalogSongs: SongStore.getAll()
+    playlist: PlaylistStore.get(playlistId),
+    songs: SongStore
   };
 }
 
 var CatalogSection = React.createClass({
   displayName: "CatalogSection",
-  getInitialState: function getInitialState() {
-    return songLists(this.props.playlistId);
-  },
+  mixins: [PureRenderMixin],
   componentWillMount: function componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
+  getInitialState: function getInitialState() {
+    return getState(this.props.playlistId);
+  },
   _onChange: function _onChange() {
-    this.setState(songLists(this.props.playlistId));
+    this.setState(getState(this.props.playlistId));
   },
   render: function render() {
     var _this = this;
-    var songs = this.state.catalogSongs.map(function (song, i) {
+    var playlistSongs = this.state.playlist.getIn(["links", "songs"]);
+    var allSongs = this.state.songs.getAll();
+
+    var songs = allSongs.map(function (song, i) {
       var songId = song.get("id");
-      var inPlaylist = _this.state.playlistSongs.contains(songId) ? "yes" : "no";
+      var inPlaylist = playlistSongs.contains(songId) ? "yes" : "no";
       return React.createElement(
         "tr",
         { key: i },
@@ -394,21 +401,21 @@ module.exports = CatalogSection;
 "use strict";
 
 var React = require("react");
+var PureRenderMixin = require("react").addons.PureRenderMixin;
 var PlaylistStore = require("../../stores/PlaylistStore");
 var SongStore = require("../../stores/SongStore");
 var RemoveSong = require("./RemoveSongFromPlaylist");
 
 function playlistSongs(playlistId) {
-  var songIds = PlaylistStore.get(playlistId).getIn(["links", "songs"]);
   return {
-    songs: songIds.map(function (songId) {
-      return SongStore.get(songId);
-    })
+    playlist: PlaylistStore.get(playlistId),
+    songs: SongStore
   };
 }
 
 var PlaylistSection = React.createClass({
   displayName: "PlaylistSection",
+  mixins: [PureRenderMixin],
   getInitialState: function getInitialState() {
     return playlistSongs(this.props.playlistId);
   },
@@ -420,7 +427,11 @@ var PlaylistSection = React.createClass({
   },
   render: function render() {
     var _this = this;
-    var items = this.state.songs.map(function (song, index) {
+    var selectedSongs = this.state.playlist.getIn(["links", "songs"]).map(function (songId) {
+      return _this.state.songs.get(songId);
+    });
+
+    var items = selectedSongs.map(function (song, index) {
       return React.createElement(
         "tr",
         { key: index },
@@ -474,10 +485,12 @@ module.exports = PlaylistSection;
 "use strict";
 
 var React = require("react");
+var PureRenderMixin = require("react").addons.PureRenderMixin;
 var PlaylistActions = require("../../actions/PlaylistActionCreators.js");
 
 var RemoveSongFromPlaylist = React.createClass({
   displayName: "RemoveSongFromPlaylist",
+  mixins: [PureRenderMixin],
   handleClick: function handleClick() {
     PlaylistActions.removeSong(this.props.playlistId, this.props.songIndex);
   },

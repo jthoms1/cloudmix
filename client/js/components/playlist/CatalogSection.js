@@ -2,31 +2,36 @@
 'use strict';
 
 let React = require('react');
+let PureRenderMixin = require('react').addons.PureRenderMixin;
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let SongStore = require('../../stores/SongStore.js');
 let AddSong = require('./AddSongToPlaylist.js');
 
-function songLists(playlistId) {
+function getState(playlistId) {
   return {
-    playlistSongs: PlaylistStore.get(playlistId).getIn(['links', 'songs']),
-    catalogSongs: SongStore.getAll()
+    playlist: PlaylistStore.get(playlistId),
+    songs: SongStore
   };
 }
 
 let CatalogSection = React.createClass({
-  getInitialState() {
-    return songLists(this.props.playlistId);
-  },
+  mixins: [PureRenderMixin],
   componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
+  getInitialState() {
+    return getState(this.props.playlistId);
+  },
   _onChange() {
-    this.setState(songLists(this.props.playlistId));
+    this.setState(getState(this.props.playlistId));
   },
   render() {
-    let songs = this.state.catalogSongs.map((song, i) => {
+    let playlistSongs = this.state.playlist.getIn(['links', 'songs']);
+    let allSongs = this.state.songs.getAll();
+
+    let songs = allSongs.map((song, i) => {
       let songId = song.get('id');
-      let inPlaylist = this.state.playlistSongs.contains(songId) ? 'yes' : 'no';
+      let inPlaylist = playlistSongs.contains(songId) ? 'yes' : 'no';
       return (
         <tr key={i}>
           <td><AddSong playlistId={this.props.playlistId} songId={songId} /></td>

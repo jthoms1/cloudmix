@@ -2,18 +2,20 @@
 'use strict';
 
 let React = require('react');
+let PureRenderMixin = require('react').addons.PureRenderMixin;
 let PlaylistStore = require('../../stores/PlaylistStore');
 let SongStore = require('../../stores/SongStore');
 let RemoveSong = require('./RemoveSongFromPlaylist');
 
 function playlistSongs(playlistId) {
-  let songIds = PlaylistStore.get(playlistId).getIn(['links', 'songs']);
   return {
-    songs: songIds.map(songId => SongStore.get(songId))
+    playlist: PlaylistStore.get(playlistId),
+    songs: SongStore
   };
 }
 
 let PlaylistSection = React.createClass({
+  mixins: [PureRenderMixin],
   getInitialState() {
     return playlistSongs(this.props.playlistId);
   },
@@ -24,7 +26,11 @@ let PlaylistSection = React.createClass({
     this.setState(playlistSongs(this.props.playlistId));
   },
   render() {
-    let items = this.state.songs.map((song, index) => {
+    let selectedSongs = this.state.playlist
+      .getIn(['links', 'songs'])
+      .map(songId => this.state.songs.get(songId));
+
+    let items = selectedSongs.map((song, index) => {
       return (
         <tr key={index}>
           <td><RemoveSong playlistId={this.props.playlistId} songIndex={index} /></td>
