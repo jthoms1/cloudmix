@@ -2,17 +2,19 @@
 
 let request = require('superagent');
 
-request.then = function(fulfilled, rejected) {
+function promiseYouWill(req) {
   return new Promise(function(resolve, reject) {
-    this.end(function(err, res) {
+    req.end(function(err, res) {
       if (err) {
         reject(err);
-      } else {
+      } if (!res.ok) {
+        reject(res.error);
+      }else {
         resolve(res);
       }
     });
-  }.bind(this)).then(fulfilled, rejected);
-};
+  });
+}
 
 function _getResourceUrl(resourceName, id=null) {
   let url = '/api/' + resourceName;
@@ -23,42 +25,38 @@ function _getResourceUrl(resourceName, id=null) {
 module.exports = {
   get (resourceName, options={}) {
     let resourceUrl = _getResourceUrl(resourceName);
-    request
+    let req = request
       .get(resourceUrl)
       .accept('application/json')
-      .query(options)
-      .then(function(res) {
-        return res;
-      });
+      .query(options);
+
+    return promiseYouWill(req);
   },
 
   create (resourceName, resource, options={}) {
     let resourceUrl = _getResourceUrl(resourceName, resource.id);
-    request.post(resourceUrl)
+    let req = request.post(resourceUrl)
       .set('Content-Type', 'application/json')
       .query(options)
-      .send(resource)
-      .then(function(res) {
-        return res;
-      });
+      .send(resource);
+
+    return promiseYouWill(req);
   },
 
   update (resourceName, resource, options={}) {
     let resourceUrl = _getResourceUrl(resourceName, resource.id);
-    request.put(resourceUrl)
+    let req = request.put(resourceUrl)
       .set('Content-Type', 'application/json')
       .query(options)
-      .send(resource)
-      .then(function(res) {
-        return res;
-      });
+      .send(resource);
+
+    return promiseYouWill(req);
   },
 
   del (resourceName, resource) {
     let resourceUrl = _getResourceUrl(resourceName, resource.id);
-    request.del(resourceUrl)
-      .then(function(res) {
-        return res;
-      });
+    let req = request.del(resourceUrl);
+
+    return promiseYouWill(req);
   }
 };

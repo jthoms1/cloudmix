@@ -13,6 +13,9 @@ module.exports = {
     API.create('playlists', [playlist])
       .then((newPlaylists) => {
         ServerActionCreators.receiveCreated(newPlaylists);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
 
@@ -23,6 +26,9 @@ module.exports = {
   update(playlistId, playlist) {
     API.update('playlists', [playlist])
       .then(() => {
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
 
@@ -33,6 +39,9 @@ module.exports = {
   destroy(playlistId) {
     API.del('playlists', [playlistId])
       .then(() => {
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
 
@@ -43,6 +52,9 @@ module.exports = {
     API.get('playlists')
       .then(function (playlists) {
         ServerActionCreators.receiveAll(playlists);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
 
@@ -60,6 +72,9 @@ module.exports = {
     API.create('playlist_songs', [playlistSong])
       .then((newPlaylistSongs) => {
         ServerActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
 
@@ -70,6 +85,9 @@ module.exports = {
   destroyPlaylistSong(playlistSongId) {
     API.del('playlist_songs', [playlistSongId])
       .then(() => {
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 };

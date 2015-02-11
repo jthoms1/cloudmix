@@ -12,8 +12,11 @@ module.exports = {
         'include': ['album.artist'].join(),
         'limit': 0
       })
-      .then(function (songs) {
+      .then(function(songs) {
         SongServerActionCreators.receiveAll(songs);
+      })
+      .catch(function(error) {
+        console.log(error);
       });
   }
 };
