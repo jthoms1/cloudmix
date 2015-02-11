@@ -7,10 +7,11 @@ let CatalogSection = require('./playlist/CatalogSection');
 
 let Main = React.createClass({
   render () {
+    let playlistId = 2;
     return (
       <div>
-        <PlaylistSection playlistId={2}/>
-        <CatalogSection playlistId={2}/>
+        <PlaylistSection playlistId={playlistId}/>
+        <CatalogSection playlistId={playlistId}/>
       </div>
     );
   }

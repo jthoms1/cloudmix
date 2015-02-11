@@ -13,7 +13,7 @@ let _playlists = Immutable.fromJS([]);
   * @param {string} playlistId The unique id of the playlist object
   */
 function _removePlaylist(playlistId) {
-  let index = _playlists.findIndex(playlist => playlist.id === playlistId);
+  let index = _playlists.findIndex(p => p.get('id') === playlistId);
   _playlists = _playlists.delete(index);
 }
 
@@ -29,7 +29,8 @@ function _addPlaylists(playlists) {
   * @param {object} playlist The playlist object to be updated
   */
 function _updatePlaylist(playlistId, playlist) {
-  let index = _playlists.findIndex(playlist => playlist.id === playlistId);
+  playlist = Immutable.Map(playlist);
+  let index = _playlists.findIndex(p => p.get('id') === playlistId);
   _playlists = _playlists.set(index, playlist);
 }
 
@@ -38,7 +39,7 @@ function _updatePlaylist(playlistId, playlist) {
   * @param {string} songId The unique id of the song object
   */
 function _addSong(playlistId, songId) {
-  let playlistIndex = _playlists.findIndex(playlist => playlist.id === playlistId);
+  let playlistIndex = _playlists.findIndex(p => p.get('id') === playlistId);
   let playlist = _playlists.get(playlistIndex).links.songs.push(songId);
   _playlists = _playlists.set(playlistIndex, playlist);
 }
@@ -48,7 +49,7 @@ function _addSong(playlistId, songId) {
   * @param {integer} songIndex The unique id of the song object
   */
 function _removeSong(playlistId, songIndex) {
-  let playlistIndex = _playlists.findIndex(playlist => playlist.id === playlistId);
+  let playlistIndex = _playlists.findIndex(p => p.get('id') === playlistId);
   let playlist = _playlists.get(playlistIndex);
   let songArray = playlist.links.songs;
 
@@ -69,15 +70,13 @@ function _setAll(playlists) {
 let PlaylistStore = assign({}, BaseStore, {
 
   get(playlistId) {
-    return _playlists.find(playlist => playlist.id === playlistId);
+    return _playlists.find(p => p.get('id') === playlistId);
   },
 
   getAll(forceUpdate=false) {
     if (!forceUpdate) {
       return _playlists;
     }
-
-
 
     return null;
   },

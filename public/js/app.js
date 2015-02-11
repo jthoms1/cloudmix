@@ -265,11 +265,12 @@ var CatalogSection = require("./playlist/CatalogSection");
 var Main = React.createClass({
   displayName: "Main",
   render: function render() {
+    var playlistId = 2;
     return React.createElement(
       "div",
       null,
-      React.createElement(PlaylistSection, { playlistId: 2 }),
-      React.createElement(CatalogSection, { playlistId: 2 })
+      React.createElement(PlaylistSection, { playlistId: playlistId }),
+      React.createElement(CatalogSection, { playlistId: playlistId })
     );
   }
 });
@@ -309,7 +310,7 @@ var AddSong = require("./AddSongToPlaylist.js");
 
 function songLists(playlistId) {
   return {
-    playlistSongs: PlaylistStore.get(playlistId),
+    playlistSongs: PlaylistStore.get(playlistId).getIn(["links", "songs"]),
     catalogSongs: SongStore.getAll()
   };
 }
@@ -328,19 +329,20 @@ var CatalogSection = React.createClass({
   render: function render() {
     var _this = this;
     var songs = this.state.catalogSongs.map(function (song, i) {
-      var inPlaylist = _this.state.playlistSongs.findIndex(song) === -1 ? "no" : "yes";
+      var songId = song.get("id");
+      var inPlaylist = _this.state.playlistSongs.contains(songId) ? "yes" : "no";
       return React.createElement(
         "tr",
         { key: i },
         React.createElement(
           "td",
           null,
-          React.createElement(AddSong, { playlistId: _this.props.playlistId, songId: song.id })
+          React.createElement(AddSong, { playlistId: _this.props.playlistId, songId: songId })
         ),
         React.createElement(
           "td",
           null,
-          song.title
+          song.get("name")
         ),
         React.createElement(
           "td",
@@ -397,7 +399,7 @@ var SongStore = require("../../stores/SongStore");
 var RemoveSong = require("./RemoveSongFromPlaylist");
 
 function playlistSongs(playlistId) {
-  var songIds = PlaylistStore.get(playlistId).links.songs;
+  var songIds = PlaylistStore.get(playlistId).getIn(["links", "songs"]);
   return {
     songs: songIds.map(function (songId) {
       return SongStore.get(songId);
@@ -430,7 +432,7 @@ var PlaylistSection = React.createClass({
         React.createElement(
           "td",
           null,
-          song.title
+          song.get("name")
         )
       );
     });
@@ -574,8 +576,8 @@ var _playlists = Immutable.fromJS([]);
   * @param {string} playlistId The unique id of the playlist object
   */
 function _removePlaylist(playlistId) {
-  var index = _playlists.findIndex(function (playlist) {
-    return playlist.id === playlistId;
+  var index = _playlists.findIndex(function (p) {
+    return p.get("id") === playlistId;
   });
   _playlists = _playlists["delete"](index);
 }
@@ -592,8 +594,9 @@ function _addPlaylists(playlists) {
   * @param {object} playlist The playlist object to be updated
   */
 function _updatePlaylist(playlistId, playlist) {
-  var index = _playlists.findIndex(function (playlist) {
-    return playlist.id === playlistId;
+  playlist = Immutable.Map(playlist);
+  var index = _playlists.findIndex(function (p) {
+    return p.get("id") === playlistId;
   });
   _playlists = _playlists.set(index, playlist);
 }
@@ -603,8 +606,8 @@ function _updatePlaylist(playlistId, playlist) {
   * @param {string} songId The unique id of the song object
   */
 function _addSong(playlistId, songId) {
-  var playlistIndex = _playlists.findIndex(function (playlist) {
-    return playlist.id === playlistId;
+  var playlistIndex = _playlists.findIndex(function (p) {
+    return p.get("id") === playlistId;
   });
   var playlist = _playlists.get(playlistIndex).links.songs.push(songId);
   _playlists = _playlists.set(playlistIndex, playlist);
@@ -615,8 +618,8 @@ function _addSong(playlistId, songId) {
   * @param {integer} songIndex The unique id of the song object
   */
 function _removeSong(playlistId, songIndex) {
-  var playlistIndex = _playlists.findIndex(function (playlist) {
-    return playlist.id === playlistId;
+  var playlistIndex = _playlists.findIndex(function (p) {
+    return p.get("id") === playlistId;
   });
   var playlist = _playlists.get(playlistIndex);
   var songArray = playlist.links.songs;
@@ -638,8 +641,8 @@ function _setAll(playlists) {
 var PlaylistStore = assign({}, BaseStore, {
 
   get: function get(playlistId) {
-    return _playlists.find(function (playlist) {
-      return playlist.id === playlistId;
+    return _playlists.find(function (p) {
+      return p.get("id") === playlistId;
     });
   },
 
@@ -648,8 +651,6 @@ var PlaylistStore = assign({}, BaseStore, {
     if (!forceUpdate) {
       return _playlists;
     }
-
-
 
     return null;
   },
@@ -728,7 +729,7 @@ var SongStore = assign({}, BaseStore, {
 
   get: function get(songId) {
     return _songs.find(function (song) {
-      return song.id === songId;
+      return song.get("id") === songId;
     });
   },
 
@@ -761,17 +762,19 @@ module.exports = SongStore;
 
 var request = require("superagent");
 
-request.then = function (fulfilled, rejected) {
-  return new Promise((function (resolve, reject) {
-    this.end(function (err, res) {
+function promiseYouWill(req) {
+  return new Promise(function (resolve, reject) {
+    req.end(function (err, res) {
       if (err) {
         reject(err);
+      }if (!res.ok) {
+        reject(res.error);
       } else {
         resolve(res);
       }
     });
-  }).bind(this)).then(fulfilled, rejected);
-};
+  });
+}
 
 function _getResourceUrl(resourceName) {
   var id = arguments[1] === undefined ? null : arguments[1];
@@ -784,32 +787,32 @@ module.exports = {
   get: function get(resourceName) {
     var options = arguments[1] === undefined ? {} : arguments[1];
     var resourceUrl = _getResourceUrl(resourceName);
-    request.get(resourceUrl).accept("application/json").query(options).then(function (res) {
-      return res;
-    });
+    var req = request.get(resourceUrl).accept("application/json").query(options);
+
+    return promiseYouWill(req);
   },
 
   create: function create(resourceName, resource) {
     var options = arguments[2] === undefined ? {} : arguments[2];
     var resourceUrl = _getResourceUrl(resourceName, resource.id);
-    request.post(resourceUrl).set("Content-Type", "application/json").query(options).send(resource).then(function (res) {
-      return res;
-    });
+    var req = request.post(resourceUrl).set("Content-Type", "application/json").query(options).send(resource);
+
+    return promiseYouWill(req);
   },
 
   update: function update(resourceName, resource) {
     var options = arguments[2] === undefined ? {} : arguments[2];
     var resourceUrl = _getResourceUrl(resourceName, resource.id);
-    request.put(resourceUrl).set("Content-Type", "application/json").query(options).send(resource).then(function (res) {
-      return res;
-    });
+    var req = request.put(resourceUrl).set("Content-Type", "application/json").query(options).send(resource);
+
+    return promiseYouWill(req);
   },
 
   del: function del(resourceName, resource) {
     var resourceUrl = _getResourceUrl(resourceName, resource.id);
-    request.del(resourceUrl).then(function (res) {
-      return res;
-    });
+    var req = request.del(resourceUrl);
+
+    return promiseYouWill(req);
   }
 };
 
@@ -828,6 +831,8 @@ module.exports = {
   create: function create(playlist) {
     API.create("playlists", [playlist]).then(function (newPlaylists) {
       ServerActionCreators.receiveCreated(newPlaylists);
+    })["catch"](function (error) {
+      console.log(error);
     });
   },
 
@@ -836,7 +841,9 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   update: function update(playlistId, playlist) {
-    API.update("playlists", [playlist]).then(function () {});
+    API.update("playlists", [playlist]).then(function () {})["catch"](function (error) {
+      console.log(error);
+    });
   },
 
   /**
@@ -844,7 +851,9 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   destroy: function destroy(playlistId) {
-    API.del("playlists", [playlistId]).then(function () {});
+    API.del("playlists", [playlistId]).then(function () {})["catch"](function (error) {
+      console.log(error);
+    });
   },
 
   /**
@@ -853,6 +862,8 @@ module.exports = {
   getAll: function getAll() {
     API.get("playlists").then(function (playlists) {
       ServerActionCreators.receiveAll(playlists);
+    })["catch"](function (error) {
+      console.log(error);
     });
   },
 
@@ -869,6 +880,8 @@ module.exports = {
 
     API.create("playlist_songs", [playlistSong]).then(function (newPlaylistSongs) {
       ServerActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
+    })["catch"](function (error) {
+      console.log(error);
     });
   },
 
@@ -877,7 +890,9 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   destroyPlaylistSong: function destroyPlaylistSong(playlistSongId) {
-    API.del("playlist_songs", [playlistSongId]).then(function () {});
+    API.del("playlist_songs", [playlistSongId]).then(function () {})["catch"](function (error) {
+      console.log(error);
+    });
   }
 };
 

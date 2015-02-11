@@ -21,7 +21,7 @@ function _setAll(songs) {
 let SongStore = assign({}, BaseStore, {
 
   get(songId) {
-    return _songs.find(song => song.id === songId);
+    return _songs.find(song => song.get('id') === songId);
   },
 
   getAll(forceUpdate=false) {

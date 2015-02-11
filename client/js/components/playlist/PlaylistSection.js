@@ -28,7 +28,7 @@ let PlaylistSection = React.createClass({
       return (
         <tr key={index}>
           <td><RemoveSong playlistId={this.props.playlistId} songIndex={index} /></td>
-          <td>{song.title}</td>
+          <td>{song.get('name')}</td>
         </tr>
       );
     });
