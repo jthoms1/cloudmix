@@ -69,7 +69,7 @@ module.exports = {
       'playlist_order': playlistOrder
     };
 
-    API.create('playlist_songs', [playlistSong])
+    API.create('playlistSongs', [playlistSong])
       .then((newPlaylistSongs) => {
         ServerActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
       })
@@ -83,7 +83,7 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   destroyPlaylistSong(playlistSongId) {
-    API.del('playlist_songs', [playlistSongId])
+    API.del('playlistSongs', [playlistSongId])
       .then(() => {
       })
       .catch((error) => {

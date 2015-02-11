@@ -878,7 +878,7 @@ module.exports = {
       playlist_order: playlistOrder
     };
 
-    API.create("playlist_songs", [playlistSong]).then(function (newPlaylistSongs) {
+    API.create("playlistSongs", [playlistSong]).then(function (newPlaylistSongs) {
       ServerActionCreators.receiveCreatedPlaylistSongs(newPlaylistSongs);
     })["catch"](function (error) {
       console.log(error);
@@ -890,7 +890,7 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   destroyPlaylistSong: function destroyPlaylistSong(playlistSongId) {
-    API.del("playlist_songs", [playlistSongId]).then(function () {})["catch"](function (error) {
+    API.del("playlistSongs", [playlistSongId]).then(function () {})["catch"](function (error) {
       console.log(error);
     });
   }
