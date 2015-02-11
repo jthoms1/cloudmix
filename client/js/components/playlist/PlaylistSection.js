@@ -7,7 +7,7 @@ let SongStore = require('../../stores/SongStore');
 let RemoveSong = require('./RemoveSongFromPlaylist');
 
 function playlistSongs(playlistId) {
-  let songIds = PlaylistStore.get(playlistId).links.songs;
+  let songIds = PlaylistStore.get(playlistId).getIn(['links', 'songs']);
   return {
     songs: songIds.map(songId => SongStore.get(songId))
   };
