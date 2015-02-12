@@ -21,6 +21,7 @@
     "iam": "^0.1.0",
     "immutable": "^3.6.2",
     "inflection": "^1.5.3",
+    "jsonapi-bookshelf": "jthoms1/jsonapi-bookshelf",
     "knex": "^0.7.3",
     "morgan": "^1.5.1",
     "node-ffprobe": "^1.2.2",
