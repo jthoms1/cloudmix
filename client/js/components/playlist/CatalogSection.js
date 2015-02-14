@@ -2,7 +2,7 @@
 'use strict';
 
 let React = require('react');
-let PureRenderMixin = require('react').addons.PureRenderMixin;
+let PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let SongStore = require('../../stores/SongStore.js');
 let AddSong = require('./AddSongToPlaylist.js');

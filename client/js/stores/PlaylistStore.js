@@ -81,9 +81,11 @@ let PlaylistStore = assign({}, BaseStore, {
     return null;
   },
 
+
   dispatcherIndex: AppDispatcher.register((payload) => {
     let action = payload.action; // this is our action from handleViewAction
 
+    debugger;
     switch (action.actionType) {
 
     /**

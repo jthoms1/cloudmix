@@ -2,7 +2,7 @@
 'use strict';
 
 let React = require('react');
-let PureRenderMixin = require('react').addons.PureRenderMixin;
+let PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 let PlaylistActions = require('../../actions/PlaylistActionCreators.js');
 
 let RemoveSongFromPlaylist = React.createClass({
