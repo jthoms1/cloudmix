@@ -16,7 +16,6 @@ var Catalog = require("./components/playlist/CatalogSection");
 require("./utils/PlaylistUtils").getAll();
 require("./utils/SongUtils").getAll();
 
-
 var App = React.createClass({
   displayName: "App",
   render: function () {
@@ -632,11 +631,9 @@ var PlaylistStore = assign({}, BaseStore, {
     return null;
   },
 
-
   dispatcherIndex: AppDispatcher.register(function (payload) {
     var action = payload.action; // this is our action from handleViewAction
 
-    debugger;
     switch (action.actionType) {
 
       /**

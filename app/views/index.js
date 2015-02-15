@@ -10,6 +10,12 @@ var HelloMessage = React.createClass({
       <DefaultLayout title={this.props.title}>
         <div id="main" className="container">
         </div>
+        <script id="props-songs" type="application/json">
+          {{{ this.props.songs }}}
+        </script>
+        <script id="props-playlists" type="application/json">
+          {{{ this.props.playlists }}}
+        </script>
       </DefaultLayout>
     );
   }
