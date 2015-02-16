@@ -2,8 +2,8 @@
 'use strict';
 
 let React = require('react');
-let PlaylistSection = require('./playlist/PlaylistSection');
-let CatalogSection = require('./playlist/CatalogSection');
+let PlaylistSection = require('./PlaylistSection');
+let CatalogSection = require('./CatalogSection');
 
 let Main = React.createClass({
   render () {

@@ -1,21 +1,17 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var DefaultRoute = Router.DefaultRoute;
-var Link = Router.Link;
-var RouteHandler = Router.RouteHandler;
+let React = require('react');
+let {Router, DefaultRoute, Link, RouteHandler} = require('react-router');
 
-var Main = require('./components/Main');
-var Playlist = require('./components/playlist/PlaylistSection');
-var Catalog = require('./components/playlist/CatalogSection');
+let Main = require('./components/playlist/Main');
+let Playlist = require('./components/playlist/PlaylistSection');
+let Catalog = require('./components/playlist/CatalogSection');
 
-require('./utils/PlaylistUtils').getAll();
-require('./utils/SongUtils').getAll();
+require('./actions/PlaylistServerActionCreators').receiveAll(window.__DATA__.playlists);
+require('./actions/SongServerActionCreators').receiveAll(window.__DATA__.songs);
 
-var App = React.createClass({
+let App = React.createClass({
   render: function() {
     return (
       <div>
@@ -30,7 +26,7 @@ var App = React.createClass({
   }
 });
 
-var routes = (
+let routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="catalog" handler={Catalog}/>
     <Route name="playlist" handler={Playlist}/>
