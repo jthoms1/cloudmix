@@ -9,9 +9,9 @@ let Main = React.createClass({
   render () {
     let playlistId = 2;
     return (
-      <div>
-        <PlaylistSection playlistId={playlistId}/>
-        <CatalogSection playlistId={playlistId}/>
+      <div className="parent">
+        <PlaylistSection className="child" playlistId={playlistId}/>
+        <CatalogSection className="child" playlistId={playlistId}/>
       </div>
     );
   }

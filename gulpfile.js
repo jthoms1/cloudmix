@@ -4,7 +4,7 @@ var gulp = require('gulp');
 var util = require('gulp-util');
 var browserify = require('browserify');
 var to5ify = require('6to5ify');
-//var sass = require('gulp-sass');
+var sass = require('gulp-sass');
 //var dotify = require('gulp-dotify');
 //var header = require('gulp-header');
 //var footer = require('gulp-footer');
@@ -17,26 +17,19 @@ var dir = {
   prod: 'publish/',
   src: 'client/'
 };
-/*
+
 gulp.task('css', function() {
   var destination = (util.env.production ? dir.prod : dir.dev) + 'css/';
 
-  gulp.src(dir.src + 'css/base.scss')
-    .pipe(sass())
-    .pipe(util.env.production ? minifyCSS() : util.noop())
+  gulp.src(dir.src + 'css/main.scss')
+    .pipe(sass({
+      includePaths: require('node-bourbon').includePaths
+    }))
     .pipe(gulp.dest(destination));
 });
-*/
 
 gulp.task('browserify', function() {
   var destination = (util.env.production ? dir.prod : dir.dev) + 'js/';
-  /*
-  gulp.src(dir.src + 'js/app.js')
-    .pipe(browserify(to5ify))
-    .pipe(concat('app.js'))
-    .pipe(util.env.production ? uglify() : util.noop())
-    .pipe(gulp.dest(destination));
-  */
 
   // create new bundle
   var b = browserify();
@@ -56,7 +49,7 @@ gulp.task('browserify', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['browserify']);
+gulp.task('default', ['browserify', 'css']);
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {

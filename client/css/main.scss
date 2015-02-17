@@ -1,0 +1,12 @@
+@import "bourbon";
+
+.parent {
+  @include align-items(stretch);
+  @include display(flex);
+  @include flex-direction(row);
+  @include justify-content(flex-start);
+}
+
+.parent > .child {
+  @include flex(1);
+}

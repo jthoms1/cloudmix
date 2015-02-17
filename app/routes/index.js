@@ -30,6 +30,7 @@ exports.index = function(req, res) {
       res.send('<html>' +
         '  <head>' +
         '    <title></title>' +
+        '    <link rel="stylesheet" type="text/css" href="/css/main.css" media="screen" />' +
         '  </head>' +
         '  <body>' +
         '    ' + pageContent +

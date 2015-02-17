@@ -352,9 +352,9 @@ var Main = React.createClass({
     var playlistId = 2;
     return React.createElement(
       "div",
-      null,
-      React.createElement(PlaylistSection, { playlistId: playlistId }),
-      React.createElement(CatalogSection, { playlistId: playlistId })
+      { className: "parent" },
+      React.createElement(PlaylistSection, { className: "child", playlistId: playlistId }),
+      React.createElement(CatalogSection, { className: "child", playlistId: playlistId })
     );
   }
 });
