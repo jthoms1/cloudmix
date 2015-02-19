@@ -2,7 +2,11 @@
 'use strict';
 
 let React = require('react');
-let {Router, DefaultRoute, Link, RouteHandler} = require('react-router');
+let Router = require('react-router');
+let Route = require('react-router').Route;
+let DefaultRoute = require('react-router').DefaultRoute;
+let Link = require('react-router').Link;
+let RouteHandler = require('react-router').RouteHandler;
 
 let Main = require('./components/playlist/Main');
 let Playlist = require('./components/playlist/PlaylistSection');

@@ -5,7 +5,7 @@ let assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
-let BaseStore = assign(EventEmitter.prototype, {
+let BaseStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
   },

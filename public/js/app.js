@@ -3,13 +3,11 @@
 "use strict";
 
 var React = require("react");
-var _require = require("react-router");
-
-var Router = _require.Router;
-var DefaultRoute = _require.DefaultRoute;
-var Link = _require.Link;
-var RouteHandler = _require.RouteHandler;
-
+var Router = require("react-router");
+var Route = require("react-router").Route;
+var DefaultRoute = require("react-router").DefaultRoute;
+var Link = require("react-router").Link;
+var RouteHandler = require("react-router").RouteHandler;
 
 var Main = require("./components/playlist/Main");
 var Playlist = require("./components/playlist/PlaylistSection");
@@ -522,7 +520,7 @@ var assign = require("object-assign");
 
 var CHANGE_EVENT = "change";
 
-var BaseStore = assign(EventEmitter.prototype, {
+var BaseStore = assign({}, EventEmitter.prototype, {
   emitChange: function emitChange() {
     this.emit(CHANGE_EVENT);
   },
