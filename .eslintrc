@@ -8,14 +8,19 @@
   },
   "ecmaFeatures": {
     "arrowFunctions": true,
-    "jsx": true,
     "blockBindings": true,
+    "classes": true,
     "defaultParams": true,
     "forOf": true,
+    "generators": true,
+    "jsx": true,
+    "modules": true,
     "objectLiteralComputedProperties": true,
+    "objectLiteralDuplicateProperties": true,
     "objectLiteralShorthandMethods": true,
     "objectLiteralShorthandProperties": true,
-    "templateStrings": true
+    "templateStrings": true,
+    "superInFunctions": true
   },
   "rules": {
     "brace-style": [2, "1tbs", { "allowSingleLine": true}],
