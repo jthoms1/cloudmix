@@ -4,17 +4,15 @@ let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/Dispatcher');
 let PlaylistActions = require('../constants/Constants').Playlist;
 var ServerAction = require('../constants/Constants').PlaylistServer;
-let Immutable = require('immutable');
-let assign = require('object-assign');
 
-let _playlists = Immutable.fromJS([]);
+let _playlists = [];
 
 /**
   * @param {string} playlistId The unique id of the playlist object
   */
 function _removePlaylist(playlistId) {
-  let index = _playlists.findIndex(p => p.get('id') === playlistId);
-  _playlists = _playlists.delete(index);
+  let index = _playlists.findIndex(p => p.id === playlistId);
+  _playlists.delete(index);
 }
 
 /**
@@ -29,9 +27,8 @@ function _addPlaylists(playlists) {
   * @param {object} playlist The playlist object to be updated
   */
 function _updatePlaylist(playlistId, playlist) {
-  playlist = Immutable.Map(playlist);
-  let index = _playlists.findIndex(p => p.get('id') === playlistId);
-  _playlists = _playlists.set(index, playlist);
+  let index = _playlists.findIndex(p => p.id === playlistId);
+  _playlists[index] = playlist;
 }
 
 /**
@@ -39,9 +36,8 @@ function _updatePlaylist(playlistId, playlist) {
   * @param {string} songId The unique id of the song object
   */
 function _addSong(playlistId, songId) {
-  let playlistIndex = _playlists.findIndex(p => p.get('id') === playlistId);
-  let playlist = _playlists.get(playlistIndex).links.songs.push(songId);
-  _playlists = _playlists.set(playlistIndex, playlist);
+  let index = _playlists.findIndex(p => p.id === playlistId);
+  _playlists[index].songIds.push(songId);
 }
 
 /**
@@ -49,28 +45,24 @@ function _addSong(playlistId, songId) {
   * @param {integer} songIndex The unique id of the song object
   */
 function _removeSong(playlistId, songIndex) {
-  let playlistIndex = _playlists.findIndex(p => p.get('id') === playlistId);
-  let playlist = _playlists.get(playlistIndex);
-  let songArray = playlist.links.songs;
-
-  playlist.links.songs = songArray.splice(songIndex, 1);
-  _playlists = _playlists.set(playlistIndex, playlist);
+  let index = _playlists.findIndex(p => p.get('id') === playlistId);
+  _playlists[index].songIds.splice(songIndex, 1);
 }
 
 /**
  * @param {array} playlists The complete list of playlists.
  */
 function _setAll(playlists) {
-  _playlists = Immutable.fromJS(playlists);
+  _playlists = playlists;
 }
 
 /**
  * PlaylistStore - Contains all application playlists
  */
-let PlaylistStore = assign({}, BaseStore, {
+let PlaylistStore = Object.assign({}, BaseStore, {
 
   get(playlistId) {
-    return _playlists.find(p => p.get('id') === playlistId);
+    return _playlists.find(p => p.id === playlistId);
   },
 
   getAll(forceUpdate=false) {

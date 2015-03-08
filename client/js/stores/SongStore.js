@@ -3,22 +3,19 @@
 let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/Dispatcher');
 let SongServerActions = require('../constants/Constants').SongServer;
-let Immutable = require('immutable');
-let assign = require('object-assign');
-
-let _songs = Immutable.fromJS([]);
+let _songs = [];
 
 /**
  * @param {array} songs The complete list of songs.
  */
 function _setAll(songs) {
-  _songs = Immutable.fromJS(songs);
+  _songs = songs;
 }
 
 /**
  * SongStore - Contains all songs
  */
-let SongStore = assign({}, BaseStore, {
+let SongStore = Object.assign({}, BaseStore, {
 
   get(songId) {
     return _songs.find(song => song.get('id') === songId);
