@@ -24,16 +24,16 @@ let CatalogSection = React.createClass({
     this.setState(getState(this.props.playlistId));
   },
   render() {
-    let playlistSongs = this.state.playlist.getIn(['links', 'songs']);
+    let playlistSongs = this.state.playlist.songIds;
     let allSongs = this.state.songs.getAll();
 
     let songs = allSongs.map((song, i) => {
-      let songId = song.get('id');
-      let inPlaylist = playlistSongs.contains(songId) ? 'yes' : 'no';
+      let songId = song.id;
+      let inPlaylist = playlistSongs.findIndex(songId) !== -1 ? 'yes' : 'no';
       return (
         <tr key={i}>
           <td><AddSong playlistId={this.props.playlistId} songId={songId} /></td>
-          <td>{song.get('name')}</td>
+          <td>{song.name}</td>
           <td>{inPlaylist}</td>
         </tr>
       );

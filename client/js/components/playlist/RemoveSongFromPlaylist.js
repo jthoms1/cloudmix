@@ -14,4 +14,5 @@ let RemoveSongFromPlaylist = React.createClass({
     );
   }
 });
+
 module.exports = RemoveSongFromPlaylist;

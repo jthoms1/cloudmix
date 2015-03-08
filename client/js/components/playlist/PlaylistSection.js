@@ -24,15 +24,14 @@ let PlaylistSection = React.createClass({
     this.setState(playlistSongs(this.props.playlistId));
   },
   render() {
-    let selectedSongs = this.state.playlist
-      .getIn(['links', 'songs'])
+    let selectedSongs = this.state.playlist.songIds
       .map(songId => this.state.songs.get(songId));
 
     let items = selectedSongs.map((song, index) => {
       return (
         <tr key={index}>
           <td><RemoveSong playlistId={this.props.playlistId} songIndex={index} /></td>
-          <td>{song.get('name')}</td>
+          <td>{song.name}</td>
         </tr>
       );
     });
