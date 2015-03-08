@@ -2,7 +2,6 @@
 'use strict';
 
 let React = require('react');
-let PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 let PlaylistStore = require('../../stores/PlaylistStore.js');
 let SongStore = require('../../stores/SongStore.js');
 let AddSong = require('./AddSongToPlaylist.js');
@@ -15,7 +14,6 @@ function getState(playlistId) {
 }
 
 let CatalogSection = React.createClass({
-  mixins: [PureRenderMixin],
   componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
