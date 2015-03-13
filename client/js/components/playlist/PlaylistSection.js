@@ -1,12 +1,31 @@
 'use strict';
 
 let React = require('react');
+let Router = require('react-router');
 let SongStore = require('../../stores/SongStore');
+let PlaylistStore = require('../../stores/PlaylistStore');
 let RemoveSong = require('./RemoveSongFromPlaylist');
 
+function getPlaylist(playlistId) {
+  playlistId = parseInt(playlistId, 10);
+  return {
+    playlist: PlaylistStore.get(playlistId)
+  };
+}
+
 let PlaylistSection = React.createClass({
+  mixins: [Router.State],
+  getInitialState() {
+    return getPlaylist(this.getParams().id);
+  },
+  componentWillMount() {
+    PlaylistStore.addChangeListener(this._onChange);
+  },
+  _onChange() {
+    this.setState(getPlaylist(this.getParams().id));
+  },
   render() {
-    let selectedSongs = this.props.playlist.songIds
+    let selectedSongs = this.state.playlist.songIds
       .map(songId => SongStore.get(songId));
 
     let items = selectedSongs.map((song) => {

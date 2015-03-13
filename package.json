@@ -30,7 +30,8 @@
     "react-router": "^0.11.6",
     "redis": "^0.12.1",
     "superagent": "^0.21.0",
-    "node-jsx": "^0.12.4"
+    "node-jsx": "^0.12.4",
+    "jsonapi2simple": "^0.2.0"
   },
   "devDependencies": {
     "6to5-jest": "^3.0.0",
@@ -43,7 +44,8 @@
     "node-bourbon": "^1.2.3",
     "reactify": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
-    "babelify": "^5.0.4"
+    "babelify": "^5.0.4",
+    "babel": "^4.7.9"
   },
   "scripts": {
     "start": "node server.js",

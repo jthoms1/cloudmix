@@ -1,5 +1,6 @@
 'use strict';
 
+require('babel/polyfill');
 let React = require('react');
 let Router = require('react-router');
 let Route = require('react-router').Route;
@@ -16,12 +17,15 @@ require('./actions/SongServerActionCreators').receiveAll(window.__DATA__.songs);
 
 let App = React.createClass({
   render: function() {
+    let playlistInfo = {
+      id: 2
+    };
     return (
       <div>
         <ul>
-          <li><Link to="app">Both</Link></li>
+          <li><Link to="app">Home</Link></li>
           <li><Link to="catalog">Catalog</Link></li>
-          <li><Link to="playlist">Playlist</Link></li>
+          <li><Link to="playlist" params={playlistInfo}>Playlist</Link></li>
         </ul>
         <RouteHandler/>
       </div>
@@ -32,7 +36,7 @@ let App = React.createClass({
 let routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="catalog" handler={Catalog}/>
-    <Route name="playlist" handler={Playlist}/>
+    <Route name="playlist" path="playlist/:id" handler={Playlist}/>
     <DefaultRoute handler={Main}/>
   </Route>
 );

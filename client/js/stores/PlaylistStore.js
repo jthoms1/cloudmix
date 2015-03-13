@@ -63,8 +63,7 @@ function _setAll(playlists) {
 let PlaylistStore = assign({}, BaseStore, {
 
   get(playlistId) {
-    let index = _playlists.findIndex(p => p.id === playlistId);
-    return _playlists[index];
+    return _playlists.find(p => p.id === playlistId);
   },
 
   getAll(forceUpdate=false) {
