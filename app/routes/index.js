@@ -5,10 +5,13 @@ var Song = require('../../models/song');
 var BPromise = require('bluebird');
 var React = require('React');
 var App = require('../components/App');
+var converter = require('jsonapi2simple');
 
 exports.index = function(req, res) {
   BPromise.all([
-      Playlist.fetchAll(),
+      Playlist.fetchAll({
+        withRelated: 'song'
+      }),
       Song.fetchAll()
     ])
     .then(function(data) {
@@ -17,8 +20,8 @@ exports.index = function(req, res) {
        * then Render App Component to a String
        */
       var props = {
-        playlists: data[0].toJSON(),
-        songs: data[1].toJSON()
+        playlists: converter.toJsonApi(data[0].toJSON()),
+        songs: converter.toJsonApi(data[1].toJSON())
       };
       var pageContent = React.renderToString(
         <App playlists={props.playlists} songs={props.songs} />
