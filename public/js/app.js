@@ -1,5 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/** @jsx React.DOM */
 "use strict";
 
 var React = require("react");
@@ -18,7 +17,8 @@ require("./actions/SongServerActionCreators").receiveAll(window.__DATA__.songs);
 
 var App = React.createClass({
   displayName: "App",
-  render: function () {
+
+  render: function render() {
     return React.createElement(
       "div",
       null,
@@ -218,7 +218,6 @@ var SongServerActionCreators = {
 module.exports = SongServerActionCreators;
 
 },{"../constants/Constants.js":10,"../dispatchers/Dispatcher.js":11}],5:[function(require,module,exports){
-/** @jsx React.DOM */
 "use strict";
 
 var React = require("react");
@@ -226,8 +225,9 @@ var PlaylistActions = require("../../actions/PlaylistActionCreators");
 
 var AddSongToPlaylist = React.createClass({
   displayName: "AddSongToPlaylist",
+
   handleClick: function handleClick() {
-    PlaylistActions.addSong(this.props.playlistId, this.props.songId);
+    PlaylistActions.addSong(this.props.playlist.id, this.props.song.id);
   },
   render: function render() {
     return React.createElement(
@@ -240,47 +240,27 @@ var AddSongToPlaylist = React.createClass({
 module.exports = AddSongToPlaylist;
 
 },{"../../actions/PlaylistActionCreators":2,"react":216}],6:[function(require,module,exports){
-/** @jsx React.DOM */
 "use strict";
 
 var React = require("react");
-var PlaylistStore = require("../../stores/PlaylistStore.js");
 var SongStore = require("../../stores/SongStore.js");
 var AddSong = require("./AddSongToPlaylist.js");
 
-function getState(playlistId) {
-  return {
-    playlist: PlaylistStore.get(playlistId),
-    songs: SongStore
-  };
-}
-
 var CatalogSection = React.createClass({
   displayName: "CatalogSection",
-  componentWillMount: function componentWillMount() {
-    PlaylistStore.addChangeListener(this._onChange);
-  },
-  getInitialState: function getInitialState() {
-    return getState(this.props.playlistId);
-  },
-  _onChange: function _onChange() {
-    this.setState(getState(this.props.playlistId));
-  },
+
   render: function render() {
     var _this = this;
-    var playlistSongs = this.state.playlist.songIds;
-    var allSongs = this.state.songs.getAll();
 
-    var songs = allSongs.map(function (song, i) {
-      var songId = song.id;
-      var inPlaylist = playlistSongs.findIndex(songId) !== -1 ? "yes" : "no";
+    var songs = SongStore.getAll().map(function (song) {
+      var inPlaylist = _this.props.playlist.songIds.findIndex(song.id) !== -1 ? "yes" : "no";
       return React.createElement(
         "tr",
-        { key: i },
+        { key: song.id },
         React.createElement(
           "td",
           null,
-          React.createElement(AddSong, { playlistId: _this.props.playlistId, songId: songId })
+          React.createElement(AddSong, { playlist: _this.props.playlist, song: song })
         ),
         React.createElement(
           "td",
@@ -332,70 +312,68 @@ var CatalogSection = React.createClass({
 
 module.exports = CatalogSection;
 
-},{"../../stores/PlaylistStore.js":13,"../../stores/SongStore.js":14,"./AddSongToPlaylist.js":5,"react":216}],7:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"../../stores/SongStore.js":14,"./AddSongToPlaylist.js":5,"react":216}],7:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
+var PlaylistStore = require("../../stores/PlaylistStore");
 var PlaylistSection = require("./PlaylistSection");
 var CatalogSection = require("./CatalogSection");
 
+function getPlaylist(playlistId) {
+  return PlaylistStore.get(playlistId);
+}
+
 var Main = React.createClass({
   displayName: "Main",
+
+  getInitialState: function getInitialState() {
+    return getPlaylist(this.props.playlistId);
+  },
+  componentWillMount: function componentWillMount() {
+    PlaylistStore.addChangeListener(this._onChange);
+  },
+  _onChange: function _onChange() {
+    this.setState(getPlaylist(this.props.playlistId));
+  },
   render: function render() {
-    var playlistId = 2;
+    var playlist = this.state.playlist;
     return React.createElement(
       "div",
       { className: "parent" },
-      React.createElement(PlaylistSection, { className: "child", playlistId: playlistId }),
-      React.createElement(CatalogSection, { className: "child", playlistId: playlistId })
+      React.createElement(PlaylistSection, { className: "child", playlist: playlist }),
+      React.createElement(CatalogSection, { className: "child", playlist: playlist })
     );
   }
 });
 
 module.exports = Main;
 
-},{"./CatalogSection":6,"./PlaylistSection":8,"react":216}],8:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"../../stores/PlaylistStore":13,"./CatalogSection":6,"./PlaylistSection":8,"react":216}],8:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
-var PlaylistStore = require("../../stores/PlaylistStore");
 var SongStore = require("../../stores/SongStore");
 var RemoveSong = require("./RemoveSongFromPlaylist");
 
-function playlistSongs(playlistId) {
-  return {
-    playlist: PlaylistStore.get(playlistId),
-    songs: SongStore
-  };
-}
-
 var PlaylistSection = React.createClass({
   displayName: "PlaylistSection",
-  getInitialState: function getInitialState() {
-    return playlistSongs(this.props.playlistId);
-  },
-  componentWillMount: function componentWillMount() {
-    PlaylistStore.addChangeListener(this._onChange);
-  },
-  _onChange: function _onChange() {
-    this.setState(playlistSongs(this.props.playlistId));
-  },
+
   render: function render() {
     var _this = this;
-    var selectedSongs = this.state.playlist.songIds.map(function (songId) {
-      return _this.state.songs.get(songId);
+
+    var selectedSongs = this.props.playlist.songIds.map(function (songId) {
+      return SongStore.get(songId);
     });
 
-    var items = selectedSongs.map(function (song, index) {
+    var items = selectedSongs.map(function (song) {
       return React.createElement(
         "tr",
-        { key: index },
+        { key: song.id },
         React.createElement(
           "td",
           null,
-          React.createElement(RemoveSong, { playlistId: _this.props.playlistId, songIndex: index })
+          React.createElement(RemoveSong, { playlist: _this.props.playlist, song: song })
         ),
         React.createElement(
           "td",
@@ -437,8 +415,7 @@ var PlaylistSection = React.createClass({
 
 module.exports = PlaylistSection;
 
-},{"../../stores/PlaylistStore":13,"../../stores/SongStore":14,"./RemoveSongFromPlaylist":9,"react":216}],9:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"../../stores/SongStore":14,"./RemoveSongFromPlaylist":9,"react":216}],9:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -446,8 +423,9 @@ var PlaylistActions = require("../../actions/PlaylistActionCreators.js");
 
 var RemoveSongFromPlaylist = React.createClass({
   displayName: "RemoveSongFromPlaylist",
+
   handleClick: function handleClick() {
-    PlaylistActions.removeSong(this.props.playlistId, this.props.songIndex);
+    PlaylistActions.removeSong(this.props.playlist.id, this.props.song.id);
   },
   render: function render() {
     return React.createElement(
@@ -536,6 +514,7 @@ var BaseStore = require("./BaseStore");
 var AppDispatcher = require("../dispatchers/Dispatcher");
 var PlaylistActions = require("../constants/Constants").Playlist;
 var ServerAction = require("../constants/Constants").PlaylistServer;
+var assign = require("object-assign");
 
 var _playlists = [];
 
@@ -584,7 +563,7 @@ function _addSong(playlistId, songId) {
   */
 function _removeSong(playlistId, songIndex) {
   var index = _playlists.findIndex(function (p) {
-    return p.get("id") === playlistId;
+    return p.id === playlistId;
   });
   _playlists[index].songIds.splice(songIndex, 1);
 }
@@ -599,16 +578,18 @@ function _setAll(playlists) {
 /**
  * PlaylistStore - Contains all application playlists
  */
-var PlaylistStore = Object.assign({}, BaseStore, {
+var PlaylistStore = assign({}, BaseStore, {
 
   get: function get(playlistId) {
-    return _playlists.find(function (p) {
+    var index = _playlists.findIndex(function (p) {
       return p.id === playlistId;
     });
+    return _playlists[index];
   },
 
   getAll: function getAll() {
     var forceUpdate = arguments[0] === undefined ? false : arguments[0];
+
     if (!forceUpdate) {
       return _playlists;
     }
@@ -665,12 +646,14 @@ var PlaylistStore = Object.assign({}, BaseStore, {
 
 module.exports = PlaylistStore;
 
-},{"../constants/Constants":10,"../dispatchers/Dispatcher":11,"./BaseStore":12}],14:[function(require,module,exports){
+},{"../constants/Constants":10,"../dispatchers/Dispatcher":11,"./BaseStore":12,"object-assign":26}],14:[function(require,module,exports){
 "use strict";
 
 var BaseStore = require("./BaseStore");
 var AppDispatcher = require("../dispatchers/Dispatcher");
 var SongServerActions = require("../constants/Constants").SongServer;
+var assign = require("object-assign");
+
 var _songs = [];
 
 /**
@@ -683,16 +666,18 @@ function _setAll(songs) {
 /**
  * SongStore - Contains all songs
  */
-var SongStore = Object.assign({}, BaseStore, {
+var SongStore = assign({}, BaseStore, {
 
   get: function get(songId) {
-    return _songs.find(function (song) {
-      return song.get("id") === songId;
+    var index = _songs.findIndex(function (p) {
+      return p.id === songId;
     });
+    return _songs[index];
   },
 
   getAll: function getAll() {
     var forceUpdate = arguments[0] === undefined ? false : arguments[0];
+
     if (!forceUpdate) {
       return _songs;
     }
@@ -715,7 +700,7 @@ var SongStore = Object.assign({}, BaseStore, {
 
 module.exports = SongStore;
 
-},{"../constants/Constants":10,"../dispatchers/Dispatcher":11,"./BaseStore":12}],15:[function(require,module,exports){
+},{"../constants/Constants":10,"../dispatchers/Dispatcher":11,"./BaseStore":12,"object-assign":26}],15:[function(require,module,exports){
 "use strict";
 
 var request = require("superagent");
@@ -736,6 +721,7 @@ function promiseYouWill(req) {
 
 function _getResourceUrl(resourceName) {
   var id = arguments[1] === undefined ? null : arguments[1];
+
   var url = "/api/" + resourceName;
   url += id ? "/" + id : "";
   return url;
@@ -744,6 +730,7 @@ function _getResourceUrl(resourceName) {
 module.exports = {
   get: function get(resourceName) {
     var options = arguments[1] === undefined ? {} : arguments[1];
+
     var resourceUrl = _getResourceUrl(resourceName);
     var req = request.get(resourceUrl).accept("application/json").query(options);
 
@@ -752,6 +739,7 @@ module.exports = {
 
   create: function create(resourceName, resource) {
     var options = arguments[2] === undefined ? {} : arguments[2];
+
     var resourceUrl = _getResourceUrl(resourceName, resource.id);
     var req = request.post(resourceUrl).set("Content-Type", "application/json").query(options).send(resource);
 
@@ -760,6 +748,7 @@ module.exports = {
 
   update: function update(resourceName, resource) {
     var options = arguments[2] === undefined ? {} : arguments[2];
+
     var resourceUrl = _getResourceUrl(resourceName, resource.id);
     var req = request.put(resourceUrl).set("Content-Type", "application/json").query(options).send(resource);
 

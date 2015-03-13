@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var util = require('gulp-util');
 var browserify = require('browserify');
-var to5ify = require('6to5ify');
+var babelify = require('babelify');
 var sass = require('gulp-sass');
 //var dotify = require('gulp-dotify');
 //var header = require('gulp-header');
@@ -33,7 +33,7 @@ gulp.task('browserify', function() {
 
   // create new bundle
   var b = browserify();
-  b.transform(to5ify);
+  b.transform(babelify);
   b.add('./' + dir.src + 'js/app.js');
   // start bundling
   return b.bundle()

@@ -1,38 +1,16 @@
-/** @jsx React.DOM */
 'use strict';
 
 let React = require('react');
-let PlaylistStore = require('../../stores/PlaylistStore.js');
 let SongStore = require('../../stores/SongStore.js');
 let AddSong = require('./AddSongToPlaylist.js');
 
-function getState(playlistId) {
-  return {
-    playlist: PlaylistStore.get(playlistId),
-    songs: SongStore
-  };
-}
-
 let CatalogSection = React.createClass({
-  componentWillMount() {
-    PlaylistStore.addChangeListener(this._onChange);
-  },
-  getInitialState() {
-    return getState(this.props.playlistId);
-  },
-  _onChange() {
-    this.setState(getState(this.props.playlistId));
-  },
   render() {
-    let playlistSongs = this.state.playlist.songIds;
-    let allSongs = this.state.songs.getAll();
-
-    let songs = allSongs.map((song, i) => {
-      let songId = song.id;
-      let inPlaylist = playlistSongs.findIndex(songId) !== -1 ? 'yes' : 'no';
+    let songs = SongStore.getAll().map((song) => {
+      let inPlaylist = this.props.playlist.songIds.findIndex(song.id) !== -1 ? 'yes' : 'no';
       return (
-        <tr key={i}>
-          <td><AddSong playlistId={this.props.playlistId} songId={songId} /></td>
+        <tr key={song.id}>
+          <td><AddSong playlist={this.props.playlist} song={song} /></td>
           <td>{song.name}</td>
           <td>{inPlaylist}</td>
         </tr>

@@ -1,36 +1,18 @@
-/** @jsx React.DOM */
 'use strict';
 
 let React = require('react');
-let PlaylistStore = require('../../stores/PlaylistStore');
 let SongStore = require('../../stores/SongStore');
 let RemoveSong = require('./RemoveSongFromPlaylist');
 
-function playlistSongs(playlistId) {
-  return {
-    playlist: PlaylistStore.get(playlistId),
-    songs: SongStore
-  };
-}
-
 let PlaylistSection = React.createClass({
-  getInitialState() {
-    return playlistSongs(this.props.playlistId);
-  },
-  componentWillMount() {
-    PlaylistStore.addChangeListener(this._onChange);
-  },
-  _onChange() {
-    this.setState(playlistSongs(this.props.playlistId));
-  },
   render() {
-    let selectedSongs = this.state.playlist.songIds
-      .map(songId => this.state.songs.get(songId));
+    let selectedSongs = this.props.playlist.songIds
+      .map(songId => SongStore.get(songId));
 
-    let items = selectedSongs.map((song, index) => {
+    let items = selectedSongs.map((song) => {
       return (
-        <tr key={index}>
-          <td><RemoveSong playlistId={this.props.playlistId} songIndex={index} /></td>
+        <tr key={song.id}>
+          <td><RemoveSong playlist={this.props.playlist} song={song} /></td>
           <td>{song.name}</td>
         </tr>
       );

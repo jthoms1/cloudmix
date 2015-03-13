@@ -3,7 +3,8 @@
 let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/Dispatcher');
 let PlaylistActions = require('../constants/Constants').Playlist;
-var ServerAction = require('../constants/Constants').PlaylistServer;
+let ServerAction = require('../constants/Constants').PlaylistServer;
+let assign = require('object-assign');
 
 let _playlists = [];
 
@@ -45,7 +46,7 @@ function _addSong(playlistId, songId) {
   * @param {integer} songIndex The unique id of the song object
   */
 function _removeSong(playlistId, songIndex) {
-  let index = _playlists.findIndex(p => p.get('id') === playlistId);
+  let index = _playlists.findIndex(p => p.id === playlistId);
   _playlists[index].songIds.splice(songIndex, 1);
 }
 
@@ -59,10 +60,11 @@ function _setAll(playlists) {
 /**
  * PlaylistStore - Contains all application playlists
  */
-let PlaylistStore = Object.assign({}, BaseStore, {
+let PlaylistStore = assign({}, BaseStore, {
 
   get(playlistId) {
-    return _playlists.find(p => p.id === playlistId);
+    let index = _playlists.findIndex(p => p.id === playlistId);
+    return _playlists[index];
   },
 
   getAll(forceUpdate=false) {

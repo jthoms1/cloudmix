@@ -3,6 +3,8 @@
 let BaseStore = require('./BaseStore');
 let AppDispatcher = require('../dispatchers/Dispatcher');
 let SongServerActions = require('../constants/Constants').SongServer;
+let assign = require('object-assign');
+
 let _songs = [];
 
 /**
@@ -15,10 +17,11 @@ function _setAll(songs) {
 /**
  * SongStore - Contains all songs
  */
-let SongStore = Object.assign({}, BaseStore, {
+let SongStore = assign({}, BaseStore, {
 
   get(songId) {
-    return _songs.find(song => song.get('id') === songId);
+    let index = _songs.findIndex(p => p.id === songId);
+    return _songs[index];
   },
 
   getAll(forceUpdate=false) {

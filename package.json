@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "6to5-jest": "^3.0.0",
-    "6to5ify": "^4.0.0",
     "browserify": "^8.1.3",
     "glob": "^4.3.2",
     "gulp": "^3.8.10",
@@ -43,7 +42,8 @@
     "jest-cli": "^0.4.0",
     "node-bourbon": "^1.2.3",
     "reactify": "^1.0.0",
-    "vinyl-source-stream": "^1.0.0"
+    "vinyl-source-stream": "^1.0.0",
+    "babelify": "^5.0.4"
   },
   "scripts": {
     "start": "node server.js",
