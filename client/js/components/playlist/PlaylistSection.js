@@ -21,6 +21,9 @@ let PlaylistSection = React.createClass({
   componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
   },
+  componentWillUnmount: function() {
+    PlaylistStore.removeChangeListener(this._onChange);
+  },
   _onChange() {
     this.setState(getPlaylist(this.getParams().id));
   },
