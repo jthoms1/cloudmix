@@ -10,14 +10,14 @@ module.exports = bookshelf.Model.extend({
   hasTimestamps: ['created_at', 'updated_at'],
 
   // Define Relationships
-  tracks: function () {
-    var Track = require('./track');
+  playlistSongs: function () {
+    var Track = require('./playlist_song');
     return this.hasMany(Track, 'playlist_id');
   },
   songs: function () {
     var Song = require('./song');
-    var Track = require('./track');
-    return this.hasMany(Song).through(Track);
+    var PlaylistSong = require('./playlist_song');
+    return this.hasMany(Song).through(PlaylistSong);
   },
   user: function () {
     var User = require('./user');

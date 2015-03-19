@@ -36,7 +36,7 @@ app.use(session({
 
 iam.configure(require('./config/iam'));
 app.use(iam.middleware());
-app.use('/api', require('jsonapi-bookshelf')(require('./models')));
+app.use('/api', require('bookshelf-jsonapi')(require('./models')));
 app.use('/auth', require('./lib/auth'));
 app.use(site());
 

@@ -20,7 +20,7 @@
     "iam": "^0.1.0",
     "immutable": "^3.6.2",
     "inflection": "^1.5.3",
-    "bookshelf-jsonapi": "^0.1.0",
+    "bookshelf-jsonapi": "^0.2.0",
     "knex": "^0.7.3",
     "morgan": "^1.5.1",
     "node-ffprobe": "^1.2.2",
@@ -31,7 +31,7 @@
     "redis": "^0.12.1",
     "superagent": "^0.21.0",
     "node-jsx": "^0.12.4",
-    "jsonapi2simple": "^0.2.0"
+    "jsonapi2simple": "^0.3.0"
   },
   "devDependencies": {
     "6to5-jest": "^3.0.0",

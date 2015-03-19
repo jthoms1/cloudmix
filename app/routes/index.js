@@ -10,7 +10,7 @@ var converter = require('jsonapi2simple');
 exports.index = function(req, res) {
   BPromise.all([
       Playlist.fetchAll({
-        withRelated: 'song'
+        withRelated: 'songs'
       }),
       Song.fetchAll()
     ])
