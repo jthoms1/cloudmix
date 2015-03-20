@@ -10,7 +10,7 @@ var converter = require('jsonapi2simple');
 exports.index = function(req, res) {
   BPromise.all([
       Playlist.fetchAll({
-        withRelated: 'songs'
+        withRelated: 'playlistSongs'
       }),
       Song.fetchAll()
     ])
@@ -20,8 +20,14 @@ exports.index = function(req, res) {
        * then Render App Component to a String
        */
       var props = {
-        playlists: converter.toJsonApi(data[0].toJSON()),
-        songs: converter.toJsonApi(data[1].toJSON())
+        playlists: converter.toJsonApi(data[0].toJSON(), {
+          type: 'playlists',
+          baseUrl: '/api'
+        }),
+        songs: converter.toJsonApi(data[1].toJSON(), {
+          type: 'songs',
+          baseUrl: '/api'
+        })
       };
       var pageContent = React.renderToString(
         <App playlists={props.playlists} songs={props.songs} />

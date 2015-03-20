@@ -1,22 +1,18 @@
 'use strict';
 
 let React = require('react');
-let Router = require('react-router');
-let SongStore = require('../../stores/SongStore');
 let PlaylistStore = require('../../stores/PlaylistStore');
-let RemoveSong = require('./RemoveSongFromPlaylist');
+let Link = require('react-router').Link;
 
-function getPlaylist(playlistId) {
-  playlistId = parseInt(playlistId, 10);
+function getPlaylists() {
   return {
-    playlist: PlaylistStore.get(playlistId)
+    playlists: PlaylistStore.getAll()
   };
 }
 
 let PlaylistSection = React.createClass({
-  mixins: [Router.State],
   getInitialState() {
-    return getPlaylist(this.getParams().id);
+    return getPlaylists();
   },
   componentWillMount() {
     PlaylistStore.addChangeListener(this._onChange);
@@ -25,32 +21,33 @@ let PlaylistSection = React.createClass({
     PlaylistStore.removeChangeListener(this._onChange);
   },
   _onChange() {
-    this.setState(getPlaylist(this.getParams().id));
+    this.setState(getPlaylists());
   },
   render() {
-    let selectedSongs = this.state.playlist.songIds
-      .map(songId => SongStore.get(songId));
-
-    let items = selectedSongs.map((song) => {
+    let items = this.state.playlists.map((playlist) => {
+      let params = { id: playlist.id };
       return (
-        <tr key={song.id}>
-          <td><RemoveSong playlist={this.props.playlist} song={song} /></td>
-          <td>{song.name}</td>
+        <tr key={playlist.id}>
+          <td><Link to="viewPlaylist" params={params}>{playlist.title}</Link></td>
         </tr>
       );
     });
     return (
       <table className="table table-hover">
-        <caption>Playlist</caption>
+        <caption>Playlists</caption>
         <thead>
           <tr>
-            <th></th>
-            <th>Item</th>
+            <th>Title</th>
           </tr>
         </thead>
         <tbody>
           {items}
         </tbody>
+        <tfoot>
+          <tr>
+            <td><Link to="createPlaylist">Create Playlist</Link></td>
+          </tr>
+        </tfoot>
       </table>
     );
   }

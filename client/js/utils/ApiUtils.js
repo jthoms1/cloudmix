@@ -1,6 +1,7 @@
 'use strict';
 
 let request = require('superagent');
+let converter = require('jsonapi2simple');
 
 function promiseYouWill(req) {
   return new Promise(function(resolve, reject) {

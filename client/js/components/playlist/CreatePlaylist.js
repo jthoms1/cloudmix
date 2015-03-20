@@ -16,27 +16,26 @@ let CreatePlaylist = React.createClass({
     return getPlaylistDefaults();
   },
   componentWillMount() {
-    PlaylistStore.addChangeListener(this._onSave);
+    PlaylistStore.addChangeListener(this._onChange);
   },
   componentWillUnmount() {
-    PlaylistStore.removeChangeListener(this._onSave);
+    PlaylistStore.removeChangeListener(this._onChange);
   },
-  _onSave() {
-
+  _onChange() {
   },
   _handleSubmit(e) {
     e.preventDefault();
-    this.setState({
-      title: React.findDOMNode(this.refs.title).value.trim(),
-      description: React.findDOMNode(this.refs.description).value.trim()
-    });
-    PlaylistActionCreators.create(this.state);
+    var newPlaylist = {
+      title: this.refs.title.getDOMNode().value.trim(),
+      description: this.refs.description.getDOMNode().value.trim()
+    };
+    PlaylistActionCreators.create(newPlaylist);
   },
   render() {
     return (
-      <form className="playlistForm" onSubmit="{this._handleSubmit}">
+      <form className="playlistForm" onSubmit={this._handleSubmit}>
         <input type="text" placeholder="Your Playlist Title" ref="title" />
-        <input type="text" placeholer="Your Playlist Description" ref="description" />
+        <input type="text" placeholder="Your Playlist Description" ref="description" />
         <input type="submit" value="Post" />
       </form>
     );
