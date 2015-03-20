@@ -2,6 +2,7 @@
 
 let ServerActionCreators = require('../actions/PlaylistServerActionCreators');
 let API = require('./ApiUtils');
+let converter = require('jsonapi2simple');
 
 module.exports = {
 
@@ -10,8 +11,12 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   create(playlist) {
-    API.create('playlists', [playlist])
+    playlist = converter.toJsonApi(playlist, {
+      type: 'playlists'
+    });
+    API.create('playlists', playlist)
       .then((newPlaylists) => {
+        newPlaylists = converter.toSimple(newPlaylists);
         ServerActionCreators.receiveCreated(newPlaylists);
       })
       .catch((error) => {
@@ -24,8 +29,12 @@ module.exports = {
    * @param {integer} songInex The unique id of the song object
    */
   update(playlistId, playlist) {
-    API.update('playlists', [playlist])
-      .then(() => {
+    playlist = converter.toJsonApi(playlist, {
+      type: 'playlists'
+    });
+    API.update('playlists', playlist)
+      .then((playlist) => {
+        playlist = converter.toSimple(playlist);
       })
       .catch((error) => {
         console.log(error);
@@ -38,7 +47,8 @@ module.exports = {
    */
   destroy(playlistId) {
     API.del('playlists', [playlistId])
-      .then(() => {
+      .then((playlists) => {
+        playlists = converter.toSimple(playlists);
       })
       .catch((error) => {
         console.log(error);
@@ -51,6 +61,7 @@ module.exports = {
   getAll() {
     API.get('playlists')
       .then(function (playlists) {
+        playlists = converter.toSimple(playlists);
         ServerActionCreators.receiveAll(playlists);
       })
       .catch((error) => {

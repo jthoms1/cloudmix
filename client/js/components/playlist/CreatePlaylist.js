@@ -3,11 +3,13 @@
 let React = require('react');
 let PlaylistActionCreators = require('../../actions/PlaylistActionCreators');
 let PlaylistStore = require('../../stores/PlaylistStore');
+let InFluxUtils = require('../../utils/InFluxUtils');
 
 function getPlaylistDefaults() {
   return {
     title: null,
-    description: null
+    description: null,
+    'user_id': 1,
   };
 }
 
@@ -27,7 +29,7 @@ let CreatePlaylist = React.createClass({
     e.preventDefault();
     var newPlaylist = {
       title: this.refs.title.getDOMNode().value.trim(),
-      description: this.refs.description.getDOMNode().value.trim()
+      description: this.refs.description.getDOMNode().value.trim(),
     };
     PlaylistActionCreators.create(newPlaylist);
   },

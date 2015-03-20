@@ -7,6 +7,7 @@ let ServerAction = require('../constants/Constants').PlaylistServer;
 let assign = require('object-assign');
 
 let _playlists = [];
+let _flightQueue = [];
 
 /**
   * @param {string} playlistId The unique id of the playlist object
@@ -83,12 +84,18 @@ let PlaylistStore = assign({}, BaseStore, {
      * Playlist Add/Update/Delete Methods
      */
     case PlaylistActions.ADD_PLAYLIST:
+      _addQueuedPlaylist(payload.action.playlist);
+      break;
+
     case ServerAction.RECEIVE_CREATED_PLAYLISTS:
-    case ServerAction.RECEIVE_UPDATED_PLAYLISTS:
-      _addPlaylists(payload.action.playlists);
+      _removeQueuedPlaylist(playload.action.playlist);
+      _addPlaylists(payload.action.playlist);
       break;
 
     case PlaylistActions.UPDATE_PLAYLIST:
+      break;
+
+    case ServerAction.RECEIVE_UPDATED_PLAYLISTS:
       _updatePlaylist(payload.action.playlistId, payload.action.playlist);
       break;
 
