@@ -1,15 +1,10 @@
 'use strict';
 
 var gulp = require('gulp');
+var less = require('gulp-less');
 var util = require('gulp-util');
 var browserify = require('browserify');
 var babelify = require('babelify');
-var sass = require('gulp-sass');
-//var dotify = require('gulp-dotify');
-//var header = require('gulp-header');
-//var footer = require('gulp-footer');
-//var minifyCSS = require('gulp-minify-css');
-//var minifyHTML = require('gulp-minify-html');
 var source = require('vinyl-source-stream');
 
 var dir = {
@@ -21,10 +16,9 @@ var dir = {
 gulp.task('css', function() {
   var destination = (util.env.production ? dir.prod : dir.dev) + 'css/';
 
-  gulp.src(dir.src + 'css/main.scss')
-    .pipe(sass({
-      includePaths: require('node-bourbon').includePaths
-    }))
+  gulp.src('./' + dir.src + 'less/styles.less')
+    .pipe(less())
+    .on('error', function(err) { console.log(err.message); })
     .pipe(gulp.dest(destination));
 });
 

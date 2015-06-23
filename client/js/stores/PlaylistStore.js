@@ -7,7 +7,6 @@ let ServerAction = require('../constants/Constants').PlaylistServer;
 let assign = require('object-assign');
 
 let _playlists = [];
-let _flightQueue = [];
 
 /**
   * @param {string} playlistId The unique id of the playlist object
