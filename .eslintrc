@@ -3,6 +3,9 @@
     "browser": true,
     "node": true
   },
+  "plugins": [
+    "react"
+  ],
   "settings": {
     "ecmascript": 6
   },
@@ -41,6 +44,17 @@
     "semi": [2, "always"],
     "space-after-function-name": [2, "never"],
     "space-after-keywords": [2, "always"],
-    "space-before-blocks": [2, "always"]
+    "space-before-blocks": [2, "always"],
+    "react/jsx-quotes": [1, "double"],
+    "react/wrap-multilines": 1,
+    "react/jsx-no-undef": 1,
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-multi-comp": 1,
+    "react/prop-types": 1,
+    "react/react-in-jsx-scope": 1,
+    "react/wrap-multilines": 1
   }
 }
