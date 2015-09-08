@@ -8,7 +8,7 @@ var BPromise = require('bluebird');
 var bcrypt = BPromise.promisifyAll(require('bcrypt'));
 
 module.exports = bookshelf.Model.extend({
-  tableName: 'cloudmix.' + tableName,
+  tableName: tableName,
   idAttribute: 'id',
   hasTimestamps: ['created_at', 'updated_at'],
 

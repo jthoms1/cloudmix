@@ -5,7 +5,7 @@ var path = require('path');
 var tableName = path.basename(__filename, path.extname(__filename));
 
 module.exports = bookshelf.Model.extend({
-  tableName: 'cloudmix.' + tableName,
+  tableName: tableName,
   idAttribute: 'id',
   hasTimestamps: ['created_at', 'updated_at'],
 

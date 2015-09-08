@@ -7,7 +7,6 @@ var morgan = require('morgan');
 var site = require('./app');
 var bodyParser = require('body-parser');
 var path = require('path');
-var iam = require('iam');
 var app = express();
 
 var port = process.env.PORT || 8080;
@@ -34,11 +33,9 @@ app.use(session({
   saveUninitialized: true
 }));
 
-iam.configure(require('./config/iam'));
-app.use(iam.middleware());
 app.use('/api', require('bookshelf-jsonapi')(require('./models')));
 app.use('/auth', require('./lib/auth'));
-app.use(site());
+//app.use(site());
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
