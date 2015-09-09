@@ -1,8 +1,8 @@
 'use strict';
 
-var bookshelf = require('../database');
-var path = require('path');
-var tableName = path.basename(__filename, path.extname(__filename));
+const bookshelf = require('../database');
+const path = require('path');
+const tableName = path.basename(__filename, path.extname(__filename));
 
 module.exports = bookshelf.Model.extend({
   tableName: tableName,
@@ -10,12 +10,12 @@ module.exports = bookshelf.Model.extend({
   hasTimestamps: ['created_at', 'updated_at'],
 
   // Define Relationships
-  playlist: function () {
-    var Playlist = require('./playlist');
+  playlist() {
+    const Playlist = require('./playlist');
     return this.belongsTo(Playlist, 'playlist_id');
   },
-  song: function () {
-    var Song = require('./song');
+  song() {
+    const Song = require('./song');
     return this.hasOne(Song, 'song_id');
   }
 });

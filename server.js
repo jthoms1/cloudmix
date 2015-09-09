@@ -1,16 +1,16 @@
 'use strict';
 
-var express = require('express');
-var session = require('express-session');
-var RedisStore = require('connect-redis')(session);
-var morgan = require('morgan');
-var site = require('./app');
-var bodyParser = require('body-parser');
-var path = require('path');
-var app = express();
+const express = require('express');
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const morgan = require('morgan');
+const site = require('./app');
+const bodyParser = require('body-parser');
+const path = require('path');
+let app = express();
 
-var port = process.env.PORT || 8080;
-var environment = process.env.NODE_ENV || 'development';
+const port = process.env.PORT || 8080;
+const environment = process.env.NODE_ENV || 'development';
 
 // Setup middleware
 app.use(express.static(path.join(__dirname, '/public')));
@@ -23,8 +23,8 @@ if (environment === 'development') {
 }
 
 // Setup redis connection info
-var redisConf = require('./config/redis');
-var redisClient = require('redis').createClient(redisConf.port, redisConf.host);
+const redisConf = require('./config/redis');
+let redisClient = require('redis').createClient(redisConf.port, redisConf.host);
 app.use(session({
   store: new RedisStore({ client: redisClient }),
   name: 'cloudmix.sid',

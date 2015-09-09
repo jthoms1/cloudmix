@@ -1,26 +1,19 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var inflection = require('inflection');
+const fs = require('fs');
+const path = require('path');
+let inflection = require('inflection');
 inflection.lowerize = function (str) {
   return str.substring( 0, 1 ).toLowerCase() + str.substring( 1 );
 };
 
-var models = {};
-
 // Find all models from the current directory
-fs
+module.exports = fs
   .readdirSync(__dirname)
-  .filter(function(file) {
-    return (file.indexOf('.') !== 0) && (file !== 'index.js');
-  })
-  // Foreach model create a
-  .forEach(function(file) {
-    var ext = path.extname(file);
-    var fileWithoutExt = file.slice(0, -ext.length);
-    var resourceName = inflection.transform(fileWithoutExt, ['pluralize', 'camelize', 'lowerize']);
+  .filter(file => (file.indexOf('.') !== 0) && (file !== 'index.js'))
+  .reduce((models, file) => {
+    let ext = path.extname(file);
+    let fileWithoutExt = file.slice(0, -ext.length);
+    let resourceName = inflection.transform(fileWithoutExt, ['pluralize', 'camelize', 'lowerize']);
     models[resourceName] = require(path.join(__dirname, fileWithoutExt));
-  });
-
-module.exports = models;
+  } {});
