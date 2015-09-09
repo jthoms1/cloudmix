@@ -30,7 +30,9 @@
     "redux": "^1.0.1",
     "bookshelf": "^0.8.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "repl-promised": "^0.1.0"
+  },
   "scripts": {
     "start": "node server.js"
   }

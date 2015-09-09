@@ -16,4 +16,5 @@ module.exports = fs
     let fileWithoutExt = file.slice(0, -ext.length);
     let resourceName = inflection.transform(fileWithoutExt, ['pluralize', 'camelize', 'lowerize']);
     models[resourceName] = require(path.join(__dirname, fileWithoutExt));
-  } {});
+    return models;
+  }, {});
