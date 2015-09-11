@@ -1,19 +1,19 @@
 'use strict';
 
-var BPromise = require('bluebird');
-var id3tagger = require('./id3');
-var glob = require('glob');
-var path = require('path');
-var Song = require('../models/song');
-var Artist = require('../models/artist');
-var Album = require('../models/album');
+const BPromise = require('bluebird');
+const id3tagger = require('./id3');
+const glob = require('glob');
+const path = require('path');
+const Song = require('../models/song');
+const Artist = require('../models/artist');
+const Album = require('../models/album');
 
-var match = path.join(process.argv[2], '/**/*.mp3');
-var files = glob.sync(match);
+const match = path.join(process.argv[2], '/**/*.mp3');
+const files = glob.sync(match);
 
 function findOrCreate(model) {
   return model.fetch()
-  .then(function (data) {
+  .then((data) => {
     if (data) {
       return BPromise.resolve(data);
     }
@@ -22,32 +22,28 @@ function findOrCreate(model) {
 }
 
 BPromise
-  .map(files, function(filePath) {
-    return id3tagger(filePath);
-  })
-  .each(function(data) {
-    return findOrCreate(Artist.forge(data.albumArtist))
-    .then(function(artist) {
-      data.albumArtist = artist;
+  .map(files, id3tagger)
+  .each((data) =>
+    findOrCreate(Artist.forge(data.albumArtist))
+      .then((artist) => {
+        data.albumArtist = artist;
 
-      return findOrCreate(Album.forge({
-        'name': data.album.name,
-        'year': parseInt(data.album.year, 10),
-        'artist_id': data.albumArtist.id
-      }));
-    })
-    .then(function(album) {
-      data.album = album;
+        return findOrCreate(Album.forge({
+          'name': data.album.name,
+          'year': parseInt(data.album.year, 10),
+          'artist_id': data.albumArtist.id
+        }));
+      })
+      .then((album) => {
+        data.album = album;
 
-      return findOrCreate(Song.forge({
-        'name': data.song.name,
-        'duration': data.song.duration,
-        'album_order': parseInt(data.song.album_order, 10),
-        'artist_id': data.albumArtist.id,
-        'album_id': data.album.id
-      }));
-    });
-  })
-  .catch(function(err) {
-    throw err;
-  });
+        return findOrCreate(Song.forge({
+          'name': data.song.name,
+          'duration': data.song.duration,
+          'album_order': parseInt(data.song.album_order, 10),
+          'artist_id': data.albumArtist.id,
+          'album_id': data.album.id
+        }));
+      });
+  )
+  .catch((err) => throw err);

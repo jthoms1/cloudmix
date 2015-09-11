@@ -1,6 +1,6 @@
-var BPromise = require('bluebird');
-var dbConfig = require('./config/database');
-var knex = require('knex')({
+const BPromise = require('bluebird');
+const dbConfig = require('./config/database');
+const knex = require('knex')({
   client: 'pg',
   debug: true,
   connection: {
@@ -10,12 +10,10 @@ var knex = require('knex')({
     database: dbConfig.dbname
   },
   pool: {
-    afterCreate: function(connection, callback) {
-      var command = 'SET SESSION SCHEMA \'' + dbConfig.schema + '\';';
+    afterCreate: (connection, callback) => {
+      let command = 'SET SESSION SCHEMA \'' + dbConfig.schema + '\';';
       BPromise.promisify(connection.query, connection)(command, [])
-        .then(function() {
-          callback(null, connection);
-        });
+        .then(() => callback(null, connection));
     }
   }
 });

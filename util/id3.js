@@ -3,24 +3,25 @@
 var BPromise = require('bluebird');
 var probe = BPromise.promisify(require('node-ffprobe'));
 
-module.exports = function (trackPath) {
-  return probe(trackPath).then(function(probeData) {
-    var data = {};
-    data.albumArtist = {
-      name: probeData.metadata.album_artist
-    };
-    data.songArtist = {
-      name: probeData.metadata.artist
-    };
-    data.album = {
-      name: probeData.metadata.album,
-      year: probeData.metadata.date
-    };
-    data.song = {
-      name: probeData.metadata.title,
-      'album_order': probeData.metadata.track,
-      duration: probeData.format.duration
-    };
-    return Promise.resolve(data);
-  });
-};
+module.exports = (trackPath) => (
+  probe(trackPath)
+    .then(probeData => (
+      Promise.resolve({
+        albumArtist: {
+          name: probeData.metadata.album_artist
+        }
+        songArtist: {
+          name: probeData.metadata.artist
+        }
+        album: {
+          name: probeData.metadata.album,
+          year: probeData.metadata.date
+        }
+        song: {
+          name: probeData.metadata.title,
+          'album_order': probeData.metadata.track,
+          duration: probeData.format.duration
+        }
+      });
+    );
+);
