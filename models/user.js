@@ -3,9 +3,7 @@
 const bookshelf = require('../database');
 const path = require('path');
 const tableName = path.basename(__filename, path.extname(__filename));
-
-const BPromise = require('bluebird');
-const bcrypt = BPromise.promisifyAll(require('bcrypt'));
+const bcrypt = require('bcrypt-nodejs');
 
 module.exports = bookshelf.Model.extend({
   tableName: tableName,
@@ -16,16 +14,12 @@ module.exports = bookshelf.Model.extend({
   playlist() {
     const Playlist = require('./playlist');
     return this.hasMany(Playlist, 'playlist_id');
+  },
+  verifyPassword() {
+    return bcrypt.compareSync(password, this.password);
   }
 }, {
-  login: BPromise.method((email, password) => {
-    if (!email || !password) {
-      throw new Error('Email and password are both required');
-    }
-    return new this({email: email.toLowerCase().trim()})
-      .fetch({require: true})
-      .tap(function(customer) {
-        return bcrypt.compare(customer.get('password'), password);
-      });
-  })
+  generateHash(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+  }
 });

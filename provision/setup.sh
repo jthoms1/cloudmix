@@ -42,11 +42,8 @@ sudo apt-get install nginx -y > /dev/null
 # --------------------------------------------------
 echo "Installing Node"
 # Add the official node repo
-curl -sL https://deb.nodesource.com/setup | sudo bash - > /dev/null
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash - > /dev/null
 sudo apt-get install nodejs -y > /dev/null
-
-# install NVM
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.26.1/install.sh | bash
 
 # Dependent global npm installs
 echo "Installing global NPM packages"

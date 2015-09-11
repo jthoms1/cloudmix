@@ -9,26 +9,26 @@
     "url": "git://github.com/jthoms1/cloudmix"
   },
   "dependencies": {
-    "bcrypt": "^0.8.0",
+    "bcrypt-nodejs": "^0.0.3",
     "bluebird": "^2.6.1",
     "body-parser": "^1.10.0",
+    "bookshelf": "^0.8.2",
+    "bookshelf-jsonapi": "^0.3.0",
     "connect-redis": "^2.1.0",
     "express": "^4.10.6",
     "express-session": "^1.10.0",
+    "immutable": "^3.7.4",
     "inflection": "^1.5.3",
-    "bookshelf-jsonapi": "^0.3.0",
+    "jsonapi2simple": "^0.3.0",
     "knex": "^0.7.3",
     "morgan": "^1.5.1",
     "node-ffprobe": "^1.2.2",
     "pg": "^4.1.1",
-    "redis": "^0.12.1",
-    "superagent": "^0.21.0",
-    "jsonapi2simple": "^0.3.0",
     "react": "^0.13.3",
     "react-router": "^0.13.3",
-    "immutable": "^3.7.4",
+    "redis": "^0.12.1",
     "redux": "^1.0.1",
-    "bookshelf": "^0.8.2"
+    "superagent": "^0.21.0"
   },
   "devDependencies": {
     "repl-promised": "^0.1.0"
